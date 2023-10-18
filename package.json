@@ -1,0 +1,35 @@
+{
+  "name": "@unipackage/net",
+  "version": "0.1.0",
+  "description": "net",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf ./dist;npx tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unipackage/net.git"
+  },
+  "keywords": [
+    "net",
+    "rpc",
+    "ts",
+    "js"
+  ],
+  "author": "waynewyang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unipackage/net/issues"
+  },
+  "homepage": "https://github.com/unipackage/net#readme",
+  "dependencies": {
+    "@glif/filecoin-rpc-client": "^2.0.43",
+    "@types/node": "20.6.2",
+    "@unipackage/utils": "^0.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
