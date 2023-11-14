@@ -1,20 +1,13 @@
 import { Result } from "@unipackage/utils"
+import { InputParams } from "../../shared/types/params"
 
-export interface EvmInput {
-    method: string
-    params?: any[]
-}
+export interface EvmInput extends InputParams {}
 
 export interface EvmOutput<T> extends Result<T> {}
 
 export interface GasOptions {
     gasLimit: number
     gasPrice: number
-}
-
-export interface ConfirmationOptions {
-    confirmations: number
-    timeout: number
 }
 
 export interface EvmListenerOptions {
@@ -26,29 +19,10 @@ export interface EvmListenerOptions {
 
 export interface EvmExecuteOptions {
     useSendTransaction?: boolean
+    from?: string
     gas?: GasOptions
-    confirmation?: ConfirmationOptions
-}
-
-export function isEvmExecuteOptions(obj: any): boolean {
-    return (
-        typeof obj === "object" &&
-        obj !== null &&
-        (typeof obj.useSendTransaction === "boolean" ||
-            typeof obj.gas === "object" ||
-            typeof obj.confirmation === "object")
-    )
-}
-
-export function isEvmListenerOptions(obj: any): boolean {
-    return (
-        (typeof obj === "object" &&
-            obj !== null &&
-            (typeof obj.eventName === "string" ||
-                typeof obj.eventAddress === "string" ||
-                typeof obj.fromBlock === "number")) ||
-        typeof obj.toBlock === "number"
-    )
+    value?: number
+    confirmations: number
 }
 
 export interface IEVM {

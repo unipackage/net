@@ -1,9 +1,7 @@
 import { Result } from "@unipackage/utils"
+import { InputParams } from "../../shared/types/params"
 
-export interface RPCRequest {
-    method: string
-    params?: any[]
-}
+export interface RPCRequest extends InputParams {}
 
 export interface RPCResponse<T> extends Result<T> {}
 

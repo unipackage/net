@@ -21,8 +21,5 @@ export abstract class EvmEngine implements IEVM {
 
 export const DefaultExecuteOptions: EvmExecuteOptions = {
     useSendTransaction: false,
-    confirmation: {
-        confirmations: 1,
-        timeout: 3,
-    },
+    confirmations: 0,
 }
