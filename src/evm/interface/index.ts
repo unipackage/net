@@ -32,7 +32,7 @@ export interface IEVM {
         options: EvmTransactionOptions
     ): Promise<EvmOutput<any>>
 
-    signTransaction(
+    signTransactionByPrivateKey(
         input: EvmInput,
         options: EvmTransactionOptions,
         privateKey?: string
@@ -42,7 +42,7 @@ export interface IEVM {
         signedTransaction: Web3Signature | EtherSignature
     ): Promise<EvmOutput<any>>
 
-    signAndSendSignedTransaction(
+    signByPrivateKeyAndSendSignedTransaction(
         input: EvmInput,
         options: EvmTransactionOptions,
         privateKey?: string

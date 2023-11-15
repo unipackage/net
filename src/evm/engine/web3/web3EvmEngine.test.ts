@@ -32,7 +32,7 @@ describe("Web3 Contract Testing", () => {
         const metadataSubmitterKey =
             "0x0904cdc9c54d32fd7bef4ac225dabfd5d7aeafeaa118ba5e2da8f8b4f36012a1"
         const submitDatasetMetadata =
-            await web3Evm.signAndSendSignedTransaction(
+            await web3Evm.signByPrivateKeyAndSendSignedTransaction(
                 {
                     method: "submitDatasetMetadata",
                     params: [
@@ -66,16 +66,17 @@ describe("Web3 Contract Testing", () => {
         const proofSubmitterKey =
             "0xe624c69077cfea8e36bf4f1a1383ad4555f2f52f2d34abfe54c0918b8d843099"
 
-        const signature = await web3Evm.signAndSendSignedTransaction(
-            { method: "appendDatasetCollateral", params: [1] },
-            {
-                web3Transaction: {
-                    from: proofSubmitter,
-                    value: web3.utils.toWei("1", "gwei"),
+        const signature =
+            await web3Evm.signByPrivateKeyAndSendSignedTransaction(
+                { method: "appendDatasetCollateral", params: [1] },
+                {
+                    web3Transaction: {
+                        from: proofSubmitter,
+                        value: web3.utils.toWei("1", "gwei"),
+                    },
                 },
-            },
-            proofSubmitterKey
-        )
+                proofSubmitterKey
+            )
         console.log(signature)
     }, 300000)
 })

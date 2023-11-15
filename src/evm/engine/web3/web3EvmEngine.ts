@@ -215,7 +215,7 @@ export class Web3EVM extends EvmEngine {
         }
     }
 
-    async signTransaction(
+    async signTransactionByPrivateKey(
         input: EvmInput,
         options: EvmTransactionOptions,
         privateKey: string
@@ -291,13 +291,13 @@ export class Web3EVM extends EvmEngine {
             }
         }
     }
-    async signAndSendSignedTransaction(
+    async signByPrivateKeyAndSendSignedTransaction(
         input: EvmInput,
         options: EvmTransactionOptions,
         privateKey: string
     ): Promise<EvmOutput<any>> {
         try {
-            const signatureResult = await this.signTransaction(
+            const signatureResult = await this.signTransactionByPrivateKey(
                 input,
                 options,
                 privateKey

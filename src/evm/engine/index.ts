@@ -18,7 +18,7 @@ export abstract class EvmEngine implements IEVM {
         options?: EvmTransactionOptions
     ): Promise<EvmOutput<T>>
 
-    abstract signTransaction(
+    abstract signTransactionByPrivateKey(
         input: EvmInput,
         options: EvmTransactionOptions,
         privateKey?: string
@@ -28,7 +28,7 @@ export abstract class EvmEngine implements IEVM {
         signedTransaction: Web3Signature | EtherSignature
     ): Promise<EvmOutput<any>>
 
-    abstract signAndSendSignedTransaction(
+    abstract signByPrivateKeyAndSendSignedTransaction(
         input: EvmInput,
         options: EvmTransactionOptions,
         privateKey?: string
