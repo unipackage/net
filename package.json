@@ -28,7 +28,8 @@
     "@glif/filecoin-rpc-client": "^2.0.43",
     "@types/node": "20.6.2",
     "@unipackage/utils": "^0.1.1",
-    "web3": "^4.2.2"
+    "ethers": "^6.8.1",
+    "web3": "^4.0.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.8",

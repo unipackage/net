@@ -1,13 +1,20 @@
 import { Result } from "@unipackage/utils"
 import { InputParams } from "../../shared/types/params"
+import { Transaction as Web3Transaction } from "web3"
+import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
+import {
+    TransactionRequest as EtherTransaction,
+    Signature as EtherSignature,
+} from "ethers"
 
 export interface EvmInput extends InputParams {}
 
 export interface EvmOutput<T> extends Result<T> {}
 
-export interface GasOptions {
-    gasLimit: number
-    gasPrice: number
+export interface EvmTransactionOptions {
+    web3Transaction?: Web3Transaction
+    etherTransaction?: EtherTransaction
+    confirmations?: number
 }
 
 export interface EvmListenerOptions {
@@ -17,18 +24,28 @@ export interface EvmListenerOptions {
     toBlock?: number
 }
 
-export interface EvmExecuteOptions {
-    useSendTransaction?: boolean
-    from?: string
-    gas?: GasOptions
-    value?: number
-    confirmations: number
-}
-
 export interface IEVM {
-    execute(
+    call(input: EvmInput): Promise<EvmOutput<any>>
+
+    sendTransaction(
         input: EvmInput,
-        options?: EvmExecuteOptions
+        options: EvmTransactionOptions
+    ): Promise<EvmOutput<any>>
+
+    signTransaction(
+        input: EvmInput,
+        options: EvmTransactionOptions,
+        privateKey?: string
+    ): Promise<Result<Web3Signature | EtherSignature>>
+
+    sendSignedTransaction(
+        signedTransaction: Web3Signature | EtherSignature
+    ): Promise<EvmOutput<any>>
+
+    signAndSendSignedTransaction(
+        input: EvmInput,
+        options: EvmTransactionOptions,
+        privateKey?: string
     ): Promise<EvmOutput<any>>
 
     listen(
