@@ -1,12 +1,21 @@
-function addMethod<T extends Object>(
+function addMethod(
     target: any,
     methods: string[],
     baseMethod: string,
-    options?: T
+    isOptions?: (parama: any) => boolean
 ) {
     methods.forEach((method) => {
         Object.defineProperty(target.prototype, method, {
             value: async function (this: any, ...params: any[]) {
+                let options: any
+                const lastParam = params[params.length - 1]
+                if (
+                    isOptions &&
+                    typeof lastParam === "object" &&
+                    isOptions(lastParam)
+                ) {
+                    options = params.pop()
+                }
                 return await this[baseMethod](
                     {
                         method,
@@ -19,12 +28,12 @@ function addMethod<T extends Object>(
     })
 }
 
-export function withMethods<T extends Object>(
+export function withMethods(
     methods: string[],
     baseMethod: string,
-    options?: T
+    isOptions?: (parama: any) => boolean
 ): ClassDecorator {
     return function (target: any) {
-        addMethod<T>(target, methods, baseMethod, options)
+        addMethod(target, methods, baseMethod, isOptions)
     }
 }

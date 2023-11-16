@@ -1,43 +1,28 @@
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Signature as EtherSignature } from "ethers"
 import { Result } from "@unipackage/utils"
-import {
-    IEVM,
-    EvmInput,
-    EvmOutput,
-    EvmTransactionOptions,
-    EvmListenerOptions,
-} from "../interface"
+import { IEVM, EvmInput, EvmOutput, EvmTransactionOptions } from "../interface"
+import Web3 from "web3"
 
 export abstract class EvmEngine implements IEVM {
     //future some common method add here
     abstract call<T>(input: EvmInput): Promise<EvmOutput<T>>
 
-    abstract sendTransaction<T>(
+    abstract send<T>(
         input: EvmInput,
-        options?: EvmTransactionOptions
+        options: EvmTransactionOptions
     ): Promise<EvmOutput<T>>
 
-    abstract signTransactionByPrivateKey(
+    abstract sign(
         input: EvmInput,
-        options: EvmTransactionOptions,
-        privateKey?: string
+        options: EvmTransactionOptions
     ): Promise<Result<Web3Signature | EtherSignature>>
 
-    abstract sendSignedTransaction(
+    abstract sendSigned<T>(
         signedTransaction: Web3Signature | EtherSignature
-    ): Promise<EvmOutput<any>>
+    ): Promise<EvmOutput<T>>
 
-    abstract signByPrivateKeyAndSendSignedTransaction(
-        input: EvmInput,
-        options: EvmTransactionOptions,
-        privateKey?: string
-    ): Promise<EvmOutput<any>>
-
-    abstract listen(
-        callback: (event: any) => void,
-        options: EvmListenerOptions
-    ): () => void
+    abstract getWeb3Object(): Web3 | null
 }
 
 export const DefaultTransactionOptions: EvmTransactionOptions = {

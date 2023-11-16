@@ -1,55 +1,79 @@
 import { Result } from "@unipackage/utils"
 import { InputParams } from "../../shared/types/params"
-import { Transaction as Web3Transaction } from "web3"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
-import {
-    TransactionRequest as EtherTransaction,
-    Signature as EtherSignature,
-} from "ethers"
+import { Signature as EtherSignature } from "ethers"
+import { Web3 } from "web3"
 
 export interface EvmInput extends InputParams {}
 
 export interface EvmOutput<T> extends Result<T> {}
 
 export interface EvmTransactionOptions {
-    web3Transaction?: Web3Transaction
-    etherTransaction?: EtherTransaction
+    from?: string
+    to?: string
+    value?: number | bigint | string
+    gas?: number
+    maxFeePerGas?: number
+    maxPriorityFeePerGas?: number
+    gasPrice?: number
+    gasLimit?: number
+    nonce?: number
+    data?: string
+    type?: number
+    input?: string
+    chainId?: number
+    networkId?: number
     confirmations?: number
+    privateKey?: string
 }
 
-export interface EvmListenerOptions {
-    eventName?: string
-    eventAddress?: string
-    fromBlock?: number
-    toBlock?: number
+export function isEvmTransactionOptions(obj: any): boolean {
+    return (
+        typeof obj === "object" &&
+        (typeof obj.from === "undefined" || typeof obj.from === "string") &&
+        (typeof obj.to === "undefined" || typeof obj.to === "string") &&
+        (typeof obj.value === "undefined" ||
+            typeof obj.value === "number" ||
+            typeof obj.value === "string" ||
+            typeof obj.value === "bigint") &&
+        (typeof obj.gas === "undefined" || typeof obj.gas === "number") &&
+        (typeof obj.maxFeePerGas === "undefined" ||
+            typeof obj.maxFeePerGas === "number") &&
+        (typeof obj.maxPriorityFeePerGas === "undefined" ||
+            typeof obj.maxPriorityFeePerGas === "number") &&
+        (typeof obj.gasPrice === "undefined" ||
+            typeof obj.gasPrice === "number") &&
+        (typeof obj.gasLimit === "undefined" ||
+            typeof obj.gasLimit === "number") &&
+        (typeof obj.nonce === "undefined" || typeof obj.nonce === "number") &&
+        (typeof obj.data === "undefined" || typeof obj.data === "string") &&
+        (typeof obj.type === "undefined" || typeof obj.type === "number") &&
+        (typeof obj.input === "undefined" || typeof obj.input === "string") &&
+        (typeof obj.chainId === "undefined" ||
+            typeof obj.chainId === "number") &&
+        (typeof obj.networkId === "undefined" ||
+            typeof obj.networkId === "number") &&
+        (typeof obj.confirmations === "undefined" ||
+            typeof obj.confirmations === "number") &&
+        (typeof obj.privateKey === "undefined" ||
+            typeof obj.privateKey === "string")
+    )
 }
 
 export interface IEVM {
     call(input: EvmInput): Promise<EvmOutput<any>>
 
-    sendTransaction(
+    send(
         input: EvmInput,
         options: EvmTransactionOptions
     ): Promise<EvmOutput<any>>
 
-    signTransactionByPrivateKey(
+    sign(
         input: EvmInput,
-        options: EvmTransactionOptions,
-        privateKey?: string
-    ): Promise<Result<Web3Signature | EtherSignature>>
+        options: EvmTransactionOptions
+    ): Promise<EvmOutput<Web3Signature | EtherSignature>>
 
-    sendSignedTransaction(
-        signedTransaction: Web3Signature | EtherSignature
-    ): Promise<EvmOutput<any>>
+    sendSigned(signed: Web3Signature | EtherSignature): Promise<EvmOutput<any>>
 
-    signByPrivateKeyAndSendSignedTransaction(
-        input: EvmInput,
-        options: EvmTransactionOptions,
-        privateKey?: string
-    ): Promise<EvmOutput<any>>
-
-    listen(
-        callback: (event: any) => void,
-        options: EvmListenerOptions
-    ): () => void
+    getWeb3Object(): Web3 | null
 }
