@@ -76,4 +76,5 @@ export interface IEVM {
     sendSigned(signed: Web3Signature | EtherSignature): Promise<EvmOutput<any>>
 
     getWeb3Object(): Web3 | null
+    decodeTxInput(txInput: string): EvmOutput<any>
 }

@@ -2,7 +2,7 @@ import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Signature as EtherSignature } from "ethers"
 import { EvmInput, EvmOutput, EvmTransactionOptions, IEVM } from "./interface"
 import { EvmEngine } from "./engine"
-import Web3, { ContractAbi } from "web3"
+import Web3, { AbiFunctionFragment } from "web3"
 import { Web3EvmEngine } from "./engine/web3/web3EvmEngine"
 
 export class EVM implements IEVM {
@@ -39,10 +39,18 @@ export class EVM implements IEVM {
     public getWeb3Object(): Web3 | null {
         return this.engine.getWeb3Object()
     }
+
+    public decodeTxInput(txInput: string): EvmOutput<any> {
+        return this.engine.decodeTxInput(txInput)
+    }
 }
 
 export class Web3Evm extends EVM {
-    constructor(abi: ContractAbi, address: string, providerUrl?: string) {
+    constructor(
+        abi: AbiFunctionFragment[],
+        address: string,
+        providerUrl?: string
+    ) {
         super(new Web3EvmEngine(abi, address, providerUrl))
     }
 }

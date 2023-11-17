@@ -1,8 +1,9 @@
 import {
     Web3,
-    ContractAbi,
     Transaction as Web3Transaction,
     TransactionReceipt,
+    AbiFunctionFragment,
+    AbiInput,
 } from "web3"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Result } from "@unipackage/utils"
@@ -18,16 +19,18 @@ declare global {
 
 export class Web3EvmEngine extends EvmEngine {
     private web3: Web3 | null = null
-    private contract: Contract<ContractAbi> | undefined
+    private contract: Contract<AbiFunctionFragment[]> | undefined
     private contractAddress: string
+    private contractABI: AbiFunctionFragment[]
 
     constructor(
-        contractABI: ContractAbi,
+        contractABI: AbiFunctionFragment[],
         contractAddress: string,
         providerUrl?: string
     ) {
         super()
         this.contractAddress = contractAddress
+        this.contractABI = contractABI
         if (!providerUrl) {
             try {
                 this.web3 = new Web3(window.ethereum)
@@ -90,7 +93,7 @@ export class Web3EvmEngine extends EvmEngine {
     }
 
     private initContract(
-        contractABI: ContractAbi,
+        contractABI: AbiFunctionFragment[],
         contractAddress: string
     ): EvmOutput<void> {
         if (!this.web3) {
@@ -138,6 +141,57 @@ export class Web3EvmEngine extends EvmEngine {
             return this.web3
         } else {
             return null
+        }
+    }
+
+    decodeTxInput(txInput: string): EvmOutput<any> {
+        if (!this.web3 || !this.contract) {
+            return {
+                ok: false,
+                error: "web3 or contract is not initialized!",
+            }
+        }
+        try {
+            const encodedFunctionName = txInput.slice(0, 10)
+            const encodedParamas = "0x" + txInput.slice(10)
+            const matchingFunction = this.contractABI.find((method) => {
+                if (method.type === "function") {
+                    const signature =
+                        this.web3!.eth.abi.encodeFunctionSignature(
+                            method as AbiFunctionFragment
+                        )
+                    return signature === encodedFunctionName
+                }
+            })
+            if (!matchingFunction) {
+                return {
+                    ok: false,
+                    error: "Not found function from Abi!",
+                }
+            }
+            const decodedParams = this.web3.eth.abi.decodeParameters(
+                matchingFunction.inputs as AbiInput[],
+                encodedParamas
+            )
+            if (!decodedParams) {
+                return {
+                    ok: false,
+                    error: "Decode params error!",
+                }
+            }
+            return {
+                ok: true,
+                data: {
+                    method: matchingFunction.name,
+                    params: decodedParams,
+                },
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                ok: false,
+                error: `decodeTxInput error:${error}!`,
+            }
         }
     }
 

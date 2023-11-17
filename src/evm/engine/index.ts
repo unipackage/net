@@ -23,6 +23,7 @@ export abstract class EvmEngine implements IEVM {
     ): Promise<EvmOutput<T>>
 
     abstract getWeb3Object(): Web3 | null
+    abstract decodeTxInput(txInput: string): EvmOutput<any>
 }
 
 export const DefaultTransactionOptions: EvmTransactionOptions = {
