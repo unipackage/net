@@ -18,6 +18,7 @@ export { EVM, Web3Evm } from "./evm"
 export {
     EvmInput,
     EvmOutput,
+    EvmDecodeOutPut,
     EvmTransactionOptions,
     isEvmTransactionOptions,
     IEVM,

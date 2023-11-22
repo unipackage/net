@@ -1,7 +1,13 @@
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Signature as EtherSignature } from "ethers"
 import { Result } from "@unipackage/utils"
-import { IEVM, EvmInput, EvmOutput, EvmTransactionOptions } from "../interface"
+import {
+    IEVM,
+    EvmInput,
+    EvmOutput,
+    EvmTransactionOptions,
+    EvmDecodeOutPut,
+} from "../interface"
 import Web3 from "web3"
 
 export abstract class EvmEngine implements IEVM {
@@ -23,7 +29,7 @@ export abstract class EvmEngine implements IEVM {
     ): Promise<EvmOutput<T>>
 
     abstract getWeb3Object(): Web3 | null
-    abstract decodeTxInput(txInput: string): EvmOutput<any>
+    abstract decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut>
 }
 
 export const DefaultTransactionOptions: EvmTransactionOptions = {

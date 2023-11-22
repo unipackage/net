@@ -6,6 +6,12 @@ import { Web3 } from "web3"
 
 export interface EvmInput extends InputParams {}
 
+export interface EvmDecodeOutPut {
+    method: string
+    params?: object
+    return?: any
+}
+
 export interface EvmOutput<T> extends Result<T> {}
 
 export interface EvmTransactionOptions {
@@ -76,5 +82,5 @@ export interface IEVM {
     sendSigned(signed: Web3Signature | EtherSignature): Promise<EvmOutput<any>>
 
     getWeb3Object(): Web3 | null
-    decodeTxInput(txInput: string): EvmOutput<any>
+    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut>
 }

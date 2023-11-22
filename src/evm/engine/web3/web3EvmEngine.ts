@@ -8,7 +8,12 @@ import {
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Result } from "@unipackage/utils"
 import type { Contract } from "web3-eth-contract"
-import { EvmInput, EvmOutput, EvmTransactionOptions } from "../../interface"
+import {
+    EvmDecodeOutPut,
+    EvmInput,
+    EvmOutput,
+    EvmTransactionOptions,
+} from "../../interface"
 import { EvmEngine, DefaultTransactionOptions } from "../index"
 
 declare global {
@@ -127,7 +132,7 @@ export class Web3EvmEngine extends EvmEngine {
                 ...params
             ).call()
 
-            return { ok: true, data: result }
+            return { ok: true, data: parseData(result!) }
         } catch (error) {
             return {
                 ok: false,
@@ -144,7 +149,7 @@ export class Web3EvmEngine extends EvmEngine {
         }
     }
 
-    decodeTxInput(txInput: string): EvmOutput<any> {
+    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut> {
         if (!this.web3 || !this.contract) {
             return {
                 ok: false,
@@ -183,7 +188,7 @@ export class Web3EvmEngine extends EvmEngine {
                 ok: true,
                 data: {
                     method: matchingFunction.name,
-                    params: decodedParams,
+                    params: parseData(decodedParams),
                 },
             }
         } catch (error) {
@@ -338,4 +343,27 @@ export class Web3EvmEngine extends EvmEngine {
             }
         }
     }
+}
+
+type ParsedData = {
+    [key: string]: any
+}
+
+function parseData(data: ParsedData): Record<string, any> {
+    const result: Record<string, any> = {}
+
+    for (const prop in data) {
+        if (!isNaN(parseInt(prop)) || prop === "__length__") {
+            continue
+        }
+
+        if (prop.startsWith("_")) {
+            const key = prop.replace(/_+/g, "")
+            result[key] = data[prop]
+        } else {
+            result[prop] = data[prop]
+        }
+    }
+
+    return result
 }
