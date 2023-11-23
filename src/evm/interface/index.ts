@@ -8,7 +8,7 @@ export interface EvmInput extends InputParams {}
 
 export interface EvmDecodeOutPut {
     method: string
-    params?: object
+    params?: any
 }
 
 export interface EvmOutput<T> extends Result<T> {}

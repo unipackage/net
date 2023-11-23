@@ -358,7 +358,7 @@ function parseData(data: ParsedData): Record<string, any> {
         }
 
         if (prop.startsWith("_")) {
-            const key = prop.replace(/_+/g, "")
+            const key = prop.replace(/^_+/, "")
             result[key] = data[prop]
         } else {
             result[prop] = data[prop]
