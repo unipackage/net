@@ -24,7 +24,6 @@ describe("Get test", () => {
     })
     it("getProviderUrl test", () => {
         const result = datasets.getProviderUrl()
-        console.log(result)
         assert.deepStrictEqual(result, providerUrl)
     })
 })
