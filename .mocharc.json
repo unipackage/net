@@ -1,0 +1,6 @@
+{ 
+    "loader" :  "ts-node/esm",
+    "spec": "test/**/*.test.ts",
+    "exclude": ["node_modules"],
+    "require": "./test/evm/mock/fixtures.ts"
+}

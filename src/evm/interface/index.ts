@@ -1,18 +1,52 @@
+/*******************************************************************************
+ *   (c) 2023 unipackage
+ *
+ *  Licensed under the GNU General Public License, Version 3.0 or later (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ********************************************************************************/
 import { Result } from "@unipackage/utils"
 import { InputParams } from "../../shared/types/params"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Signature as EtherSignature } from "ethers"
-import { Web3 } from "web3"
+import { Contract, Web3, AbiFunctionFragment } from "web3"
 
-export interface EvmInput extends InputParams {}
+/**
+ * Default transaction options for EVM transactions.
+ */
+export const defaultTransactionOptions: EvmTransactionOptions = {
+    confirmations: 0,
+}
 
+/**
+ * Represents the output of decoding EVM input.
+ */
 export interface EvmDecodeOutPut {
     method: string
     params?: any
 }
 
+/**
+ * Represents the input for an EVM operation.
+ */
+export interface EvmInput extends InputParams {}
+
+/**
+ * Represents the output of an EVM operation.
+ */
 export interface EvmOutput<T> extends Result<T> {}
 
+/**
+ * Represents the options for an EVM transaction.
+ */
 export interface EvmTransactionOptions {
     from?: string
     to?: string
@@ -32,6 +66,124 @@ export interface EvmTransactionOptions {
     privateKey?: string
 }
 
+/**
+ * Represents the Ethereum Virtual Machine (EVM) interface.
+ */
+export interface IEVM {
+    /**
+     * Call a function on the EVM contract.
+     *
+     * @param input - The input parameters for the function call.
+     * @returns A promise that resolves to the output of the function call.
+     */
+    call(input: EvmInput): Promise<EvmOutput<any>>
+
+    /**
+     * Decode the transaction input on the EVM.
+     *
+     * @param txInput - The transaction input data.
+     * @returns A promise that resolves to the decoded output.
+     */
+    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut>
+
+    /**
+     * Encode EVM input to transaction input data.
+     *
+     * @param input - The input parameters for the EVM operation.
+     * @returns A promise that resolves to the encoded transaction input.
+     */
+    encodeEvmInputToTxinput(input: EvmInput): EvmOutput<string>
+
+    /**
+     * Encode function signature using the ABI.
+     *
+     * @param abi - The ABI function fragment.
+     * @returns The encoded function signature or an error result.
+     */
+    encodeFunctionSignatureByAbi(abi: AbiFunctionFragment): Result<string>
+
+    /**
+     * Encode function signature using the function name.
+     *
+     * @param name - The name of the function.
+     * @returns A promise that resolves to the encoded function signature or an error result.
+     */
+    encodeFunctionSignatureByFuntionName(name: string): EvmOutput<string>
+
+    /**
+     * Get the EVM contract.
+     *
+     * @returns The EVM contract object or null if not initialized.
+     */
+    getContract(): Contract<AbiFunctionFragment[]> | null
+
+    /**
+     * Get the EVM contract address.
+     *
+     * @returns The EVM contract address or null if not initialized.
+     */
+    getContractAddress(): string
+
+    /**
+     * Get the EVM contract abi.
+     *
+     * @returns The EVM contract abi or null if not initialized.
+     */
+    getContractABI(): AbiFunctionFragment[]
+
+    /**
+     * Get the EVM provider url.
+     *
+     * @returns The EVM provider url or undefined not initialized.
+     */
+    getProviderUrl(): string | undefined
+
+    /**
+     * Get the Web3 object.
+     *
+     * @returns The Web3 object or null if not initialized.
+     */
+    getWeb3(): Web3 | null
+
+    /**
+     * Send a transaction to the EVM contract.
+     *
+     * @param input - The input parameters for the transaction.
+     * @param options - The transaction options.
+     * @returns A promise that resolves to the transaction result.
+     */
+    send(
+        input: EvmInput,
+        options: EvmTransactionOptions
+    ): Promise<EvmOutput<any>>
+
+    /**
+     * Send a signed transaction to the EVM.
+     *
+     * @param signed - The signed transaction data.
+     * @returns A promise that resolves to the transaction result.
+     */
+    sendSigned(signed: Web3Signature | EtherSignature): Promise<EvmOutput<any>>
+
+    /**
+     * Sign a transaction on the EVM.
+     *
+     * @param input - The input parameters for the transaction.
+     * @param options - The transaction options.
+     * @returns A promise that resolves to the signed transaction or an error result.
+     */
+    sign(
+        input: EvmInput,
+        options: EvmTransactionOptions
+    ): Promise<EvmOutput<Web3Signature | EtherSignature>>
+}
+
+/**
+ * Check if an object is of type EvmTransactionOptions.
+ *
+ * @param obj - The object to check.
+ * @returns True if the object is of type EvmTransactionOptions, false otherwise.
+ */
 export function isEvmTransactionOptions(obj: any): boolean {
     return (
         typeof obj === "object" &&
@@ -63,23 +215,4 @@ export function isEvmTransactionOptions(obj: any): boolean {
         (typeof obj.privateKey === "undefined" ||
             typeof obj.privateKey === "string")
     )
-}
-
-export interface IEVM {
-    call(input: EvmInput): Promise<EvmOutput<any>>
-
-    send(
-        input: EvmInput,
-        options: EvmTransactionOptions
-    ): Promise<EvmOutput<any>>
-
-    sign(
-        input: EvmInput,
-        options: EvmTransactionOptions
-    ): Promise<EvmOutput<Web3Signature | EtherSignature>>
-
-    sendSigned(signed: Web3Signature | EtherSignature): Promise<EvmOutput<any>>
-
-    getWeb3Object(): Web3 | null
-    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut>
 }

@@ -1,0 +1,588 @@
+/*******************************************************************************
+ *   (c) 2023 unipackage
+ *
+ *  Licensed under the GNU General Public License, Version 3.0 or later (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ********************************************************************************/
+import {
+    Web3,
+    Transaction as Web3Transaction,
+    TransactionReceipt,
+    AbiFunctionFragment,
+    AbiInput,
+} from "web3"
+import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
+import { Result } from "@unipackage/utils"
+import type { Contract } from "web3-eth-contract"
+import {
+    EvmDecodeOutPut,
+    EvmInput,
+    EvmOutput,
+    EvmTransactionOptions,
+} from "../../interface"
+import { IEVM, defaultTransactionOptions } from "../../interface"
+import {
+    getEncodedParamsFromTxinput,
+    getFunctionSignatureFromTxinput,
+    parseEvmReplyData,
+} from "./tools"
+
+/**
+ * Define ethereum as an optional property.
+ */
+declare global {
+    interface Window {
+        ethereum?: any
+    }
+}
+
+/**
+ * Class representing a Web3Evm instance.
+ */
+export class Web3Evm implements IEVM {
+    private web3Object: Web3 | null = null
+    private contractObject: Contract<AbiFunctionFragment[]> | undefined
+    private contractAddress: string
+    private contractABI: AbiFunctionFragment[]
+    private providerUrl: string | undefined = undefined
+
+    /**
+     * Constructor for Web3Evm class.
+     *
+     * @TODO test window.ethereum
+     * @param contractABI - The contract's ABI.
+     * @param contractAddress - The contract's address.
+     * @param providerUrl - The provider URL.
+     */
+    constructor(
+        contractABI: AbiFunctionFragment[],
+        contractAddress: string,
+        providerUrl?: string
+    ) {
+        this.contractAddress = contractAddress
+        this.contractABI = contractABI
+        this.providerUrl = providerUrl
+
+        if (!providerUrl) {
+            try {
+                this.web3Object = new Web3(window.ethereum)
+                window.ethereum.enable().then(() => {
+                    this.initContract(contractABI, contractAddress)
+                })
+            } catch (error) {
+                console.error("Error enabling window ethereum accounts:", error)
+            }
+        } else {
+            this.web3Object = new Web3(providerUrl)
+            this.initContract(contractABI, contractAddress)
+        }
+    }
+
+    /**
+     * Generates a transaction based on input and options.
+     *
+     * @TODO  estimate gas
+     * @TODO  debug maxFeePerGas,maxPriorityFeePerGas
+     * @param input - The EVM input.
+     * @param options - The transaction options.
+     * @returns A promise resolving to EvmOutput object with the transaction.
+     */
+    private async generateTransaction(
+        input: EvmInput,
+        options: EvmTransactionOptions
+    ): Promise<EvmOutput<Web3Transaction>> {
+        if (!this.web3Object || !this.contractObject) {
+            return {
+                ok: false,
+                error: "Web3 or contract is not initialized!",
+            }
+        }
+
+        if (!options.from) {
+            return {
+                ok: false,
+                error: "generateTransaction missing param: [from]",
+            }
+        }
+
+        try {
+            const nonce = await this.web3Object.eth.getTransactionCount(
+                options.from
+            )
+
+            const dataResult = this.encodeEvmInputToTxinput(input)
+            if (!dataResult.ok) {
+                return {
+                    ok: false,
+                    error: dataResult.error,
+                }
+            }
+
+            const txObject: Web3Transaction = {
+                ...defaultTransactionOptions,
+                to: this.contractAddress,
+                gas: 200000000,
+                maxFeePerGas: this.web3Object.utils.toWei("10", "gwei"),
+                maxPriorityFeePerGas: this.web3Object.utils.toWei("1", "gwei"),
+                nonce: nonce,
+                ...options,
+                data: dataResult.data,
+            }
+
+            return { ok: true, data: txObject }
+        } catch (error) {
+            return {
+                ok: false,
+                error: `generateTransaction error: ${error}`,
+            }
+        }
+    }
+
+    /**
+     * Initializes the contract.
+     *
+     * @param contractABI - The contract's ABI.
+     * @param contractAddress - The contract's address.
+     * @returns EvmOutput object indicating success or failure.
+     */
+    private initContract(
+        contractABI: AbiFunctionFragment[],
+        contractAddress: string
+    ): EvmOutput<void> {
+        if (!this.web3Object) {
+            return {
+                ok: false,
+                error: "Web3 is not initialized!",
+            }
+        }
+
+        this.contractObject = new this.web3Object.eth.Contract(
+            contractABI,
+            contractAddress,
+            {
+                dataInputFill: "data",
+            }
+        )
+        return { ok: true }
+    }
+
+    /**
+     * Calls a contract function.
+     *
+     * @param input - The EVM input.
+     * @returns A promise resolving to EvmOutput object with the result of the contract call.
+     */
+    async call(input: EvmInput): Promise<EvmOutput<any>> {
+        if (!this.web3Object || !this.contractObject) {
+            return {
+                ok: false,
+                error: "Web3 or contract is not initialized!",
+            }
+        }
+
+        try {
+            const params: any[] = input.params || []
+            const result = await this.contractObject.methods[input.method](
+                //@ts-ignore
+                ...params
+            ).call()
+
+            return { ok: true, data: parseEvmReplyData(result!) }
+        } catch (error) {
+            return {
+                ok: false,
+                error: `Call contract error: ${error}`,
+            }
+        }
+    }
+
+    /**
+     * Decodes transaction input.
+     *
+     * @param txInput - The transaction input.
+     * @returns A promise resolving to EvmOutput object with the decoded transaction input.
+     */
+    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut> {
+        if (!this.web3Object) {
+            return {
+                ok: false,
+                error: "Web3 is not initialized!",
+            }
+        }
+
+        try {
+            const matchingFunction = this.contractABI.find((abi) => {
+                const functionSignatureFromAbi =
+                    this.encodeFunctionSignatureByAbi(abi)
+                const functionSignatureFromTxinput =
+                    getFunctionSignatureFromTxinput(txInput)
+
+                if (
+                    functionSignatureFromAbi.ok &&
+                    functionSignatureFromTxinput.ok
+                ) {
+                    return (
+                        functionSignatureFromAbi.data ===
+                        functionSignatureFromTxinput.data
+                    )
+                }
+            })
+
+            if (!matchingFunction) {
+                return {
+                    ok: false,
+                    error: "Not found function in ABI!",
+                }
+            }
+
+            const encodedParams = getEncodedParamsFromTxinput(txInput)
+            if (!encodedParams.ok || !encodedParams.data) {
+                return {
+                    ok: false,
+                    error: "getEncodedParamsFromTxinput Error",
+                }
+            }
+            const decodedParams = this.web3Object.eth.abi.decodeParameters(
+                matchingFunction.inputs as AbiInput[],
+                encodedParams.data
+            )
+            if (!decodedParams) {
+                return {
+                    ok: false,
+                    error: "Decode params error!",
+                }
+            }
+
+            return {
+                ok: true,
+                data: {
+                    method: matchingFunction.name,
+                    params: parseEvmReplyData(decodedParams),
+                },
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                ok: false,
+                error: `Decode transaction input error: ${error}!`,
+            }
+        }
+    }
+
+    /**
+     * Encodes EVM input to transaction input.
+     *
+     * @param input - The EVM input.
+     * @returns Result object with the encoded transaction input.
+     */
+    encodeEvmInputToTxinput(input: EvmInput): Result<string> {
+        const params: any[] = input.params || []
+        if (!this.contractObject) {
+            return {
+                ok: false,
+                error: "Contract is not initialized!",
+            }
+        }
+
+        try {
+            return {
+                ok: true,
+                data: this.contractObject.methods[input.method](
+                    //@ts-ignore
+                    ...params
+                ).encodeABI(),
+            }
+        } catch (error) {
+            return {
+                ok: false,
+                error: `Encode EVM input to transaction input error: ${error}`,
+            }
+        }
+    }
+
+    /* Encodes ABI to function signature.
+     *
+     * @param web3 - The Web3 instance.
+     * @param abi - The ABI function fragment.
+     * @returns Result object with the encoded function signature.
+     */
+    encodeFunctionSignatureByAbi(abi: AbiFunctionFragment): Result<string> {
+        if (!this.web3Object) {
+            return {
+                ok: false,
+                error: "Web3 is not initialized!",
+            }
+        }
+
+        try {
+            if (abi.type === "function") {
+                const signature =
+                    this.web3Object.eth.abi.encodeFunctionSignature(abi)
+                return {
+                    ok: true,
+                    data: signature,
+                }
+            } else {
+                throw new Error("Provided ABI is not a function ABI!")
+            }
+        } catch (error) {
+            return {
+                ok: false,
+                error: error,
+            }
+        }
+    }
+
+    /**
+     * Encodes function signature.
+     *
+     * @param name - The name of the function.
+     * @returns Result object with the encoded function signature.
+     */
+    encodeFunctionSignatureByFuntionName(name: string): Result<string> {
+        if (!this.web3Object) {
+            return {
+                ok: false,
+                error: "Web3 is not initialized!",
+            }
+        }
+        const abi = this.contractABI.find((method, index) => {
+            return method.type === "function" && method.name === name
+        })
+
+        if (abi) {
+            return this.encodeFunctionSignatureByAbi(abi)
+        } else {
+            return {
+                ok: false,
+                error: "Function does not exist!",
+            }
+        }
+    }
+
+    /**
+     * Contract getter.
+     *
+     * @NOTE check contract not null when using in window.ethereum
+     * @returns Contract instance or null.
+     */
+    getContract(): Contract<AbiFunctionFragment[]> | null {
+        if (this.contractObject) {
+            return this.contractObject
+        } else {
+            return null
+        }
+    }
+
+    /**
+     * Get the EVM contract address.
+     *
+     * @returns The EVM contract address or null if not initialized.
+     */
+    getContractAddress(): string {
+        return this.contractAddress
+    }
+
+    /**
+     * Get the EVM contract abi.
+     *
+     * @returns The EVM contract abi or null if not initialized.
+     */
+    getContractABI(): AbiFunctionFragment[] {
+        return this.contractABI
+    }
+
+    /**
+     * Get the EVM provider url.
+     *
+     * @returns The EVM provider url or null if not initialized.
+     */
+    getProviderUrl(): string | undefined {
+        return this.providerUrl
+    }
+    /**
+     * Web3 getter.
+     *
+     * @returns Web3 instance or null.
+     */
+    getWeb3(): Web3 | null {
+        if (this.web3Object) {
+            return this.web3Object
+        } else {
+            return null
+        }
+    }
+
+    /**
+     * Sends a transaction.
+     *
+     * @TODO test window.ethereum
+     * @param input - The EVM input.
+     * @param options - The transaction options.
+     * @returns A promise resolving to EvmOutput object with the result of the transaction.
+     */
+    async send(
+        input: EvmInput,
+        options: EvmTransactionOptions
+    ): Promise<EvmOutput<any>> {
+        if (!this.web3Object || !this.contractObject) {
+            return {
+                ok: false,
+                error: "Web3 or contract is not initialized!",
+            }
+        }
+
+        try {
+            const generateTransactionResult = await this.generateTransaction(
+                input,
+                options
+            )
+            if (
+                !generateTransactionResult.ok ||
+                !generateTransactionResult.data
+            ) {
+                return {
+                    ok: false,
+                    error: `Generate transaction error: ${generateTransactionResult.error}`,
+                }
+            }
+
+            let result: TransactionReceipt
+            if (!options.privateKey) {
+                try {
+                    result = await this.web3Object.eth.sendTransaction(
+                        generateTransactionResult.data
+                    )
+                } catch (error) {
+                    return {
+                        ok: false,
+                        error: `Send transaction error: ${error}`,
+                    }
+                }
+            } else {
+                try {
+                    const signResult = await this.sign(input, options)
+                    if (!signResult.ok || !signResult.data) {
+                        return {
+                            ok: false,
+                            error: `Sign error: ${signResult.error}`,
+                        }
+                    }
+
+                    const sendSignedResult = await this.sendSigned(
+                        signResult.data
+                    )
+                    if (!sendSignedResult.ok) {
+                        return {
+                            ok: false,
+                            error: `Send signed transaction error: ${sendSignedResult.error}`,
+                        }
+                    }
+                    result = sendSignedResult.data
+                } catch (error) {
+                    return {
+                        ok: false,
+                        error: `Sign and send signed transaction error: ${error}`,
+                    }
+                }
+            }
+
+            return { ok: true, data: result }
+        } catch (error) {
+            return {
+                ok: false,
+                error: `Send to contract error: ${error}`,
+            }
+        }
+    }
+
+    /**
+     * Sends a signed transaction.
+     *
+     * @param signedTransaction - The signed transaction.
+     * @returns A promise resolving to EvmOutput object with the result of the signed transaction.
+     */
+    async sendSigned(
+        signedTransaction: Web3Signature
+    ): Promise<EvmOutput<any>> {
+        if (!this.web3Object || !this.contractObject) {
+            return {
+                ok: false,
+                error: "Web3 or contract is not initialized!",
+            }
+        }
+        if (!signedTransaction) {
+            return {
+                ok: false,
+                error: "Signed transaction is null!",
+            }
+        }
+
+        try {
+            const result = await this.web3Object.eth.sendSignedTransaction(
+                signedTransaction.rawTransaction
+            )
+            return { ok: true, data: result }
+        } catch (error) {
+            return {
+                ok: false,
+                error: `Send signed transaction error: ${error}`,
+            }
+        }
+    }
+
+    /**
+     * Signs a transaction.
+     *
+     * @param input - The EVM input.
+     * @param options - The transaction options.
+     * @returns A promise resolving to Result object with the signed transaction.
+     */
+    async sign(
+        input: EvmInput,
+        options: EvmTransactionOptions
+    ): Promise<Result<Web3Signature>> {
+        if (!this.web3Object || !this.contractObject) {
+            return {
+                ok: false,
+                error: "Web3 or contract is not initialized!",
+            }
+        }
+
+        try {
+            const generateTransactionResult = await this.generateTransaction(
+                input,
+                options
+            )
+            if (
+                !generateTransactionResult.ok ||
+                !generateTransactionResult.data
+            ) {
+                return {
+                    ok: false,
+                    error: `Generate transaction error: ${generateTransactionResult.error}`,
+                }
+            }
+
+            const result = await this.web3Object.eth.accounts.signTransaction(
+                generateTransactionResult.data,
+                options.privateKey!
+            )
+            return { ok: true, data: result }
+        } catch (error) {
+            return {
+                ok: false,
+                error: `Sign error: ${error}`,
+            }
+        }
+    }
+}
