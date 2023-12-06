@@ -13,17 +13,17 @@ describe("Encoding and decoding test", () => {
                 ok: true,
                 data: {
                     method: "submitDatasetMetadata",
-                    params: {
-                        title: "SguzFPXQXN",
-                        industry: "4ssgO862zu",
-                        name: "EwX8cSqmM9",
-                        description: "dMnFXPUPa3",
-                        source: "tR99T7YG2l",
-                        accessMethod: "LM2tM6QW48",
-                        sizeInBytes: BigInt(512000000),
-                        isPublic: true,
-                        version: BigInt(1),
-                    },
+                    params: [
+                        "SguzFPXQXN",
+                        "4ssgO862zu",
+                        "EwX8cSqmM9",
+                        "dMnFXPUPa3",
+                        "tR99T7YG2l",
+                        "LM2tM6QW48",
+                        BigInt(512000000),
+                        true,
+                        BigInt(1),
+                    ],
                 },
             }
 

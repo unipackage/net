@@ -8,19 +8,19 @@ describe("Call test", () => {
 
         const expected = {
             ok: true,
-            data: {
-                title: "test-sirius",
-                industry: "my industry",
-                name: "hi siri",
-                description: "desc good data set",
-                source: "aws://sdfa.com",
-                accessMethod: "dataswap.com/test1",
-                submitter: "0x15B2896f76Cee4E2C567e7bC671bB701D7339B30",
-                createdBlockNumber: BigInt(1084025),
-                sizeInBytes: BigInt(512000000),
-                isPublic: true,
-                version: BigInt(1),
-            },
+            data: [
+                "test-sirius",
+                "my industry",
+                "hi siri",
+                "desc good data set",
+                "aws://sdfa.com",
+                "dataswap.com/test1",
+                "0x15B2896f76Cee4E2C567e7bC671bB701D7339B30",
+                BigInt(1084025),
+                BigInt(512000000),
+                true,
+                BigInt(1),
+            ]
         }
 
         assert.deepStrictEqual(meta, expected)

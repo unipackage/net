@@ -79,20 +79,21 @@ export function getFunctionSignatureFromTxinput(
  * @param data - The data object.
  * @returns Parsed data as a record.
  */
-export function parseEvmReplyData(data: EvmReplyData): Record<string, any> {
-    const result: Record<string, any> = {}
+export function parseEvmReplyData(data: any): Array<any> | any {
+    const result: Array<any> = []
 
-    for (const prop in data) {
+    let count = 0
+    let dataMap = data as EvmReplyData
+    for (const prop in dataMap) {
         if (!isNaN(parseInt(prop)) || prop === "__length__") {
             continue
         }
+        result.push(data[prop])
+        count++
+    }
 
-        if (prop.startsWith("_")) {
-            const key = prop.replace(/^_+/, "")
-            result[key] = data[prop]
-        } else {
-            result[prop] = data[prop]
-        }
+    if (count == 0) {
+        return data
     }
 
     return result
