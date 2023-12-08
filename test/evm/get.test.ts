@@ -1,29 +1,76 @@
 var assert = require("assert")
 const { it } = require("mocha")
-import { datasets } from "./env/datasets"
+import { web3Datasets, ethersDatasets } from "./env/datasets"
 import { datasetContractAddress, providerUrl } from "./env/constant"
 import DatasetABI from "./testAbi/Datasets.json"
+import { EvmType } from "../../src/evm/interface"
 
 describe("Get test", () => {
     it("getWeb3 test", () => {
-        const result = datasets.getWeb3()
-        assert.deepStrictEqual(result !== null && result !== undefined, true)
+        const web3Result = web3Datasets.getWeb3()
+        const ethersResult = ethersDatasets.getWeb3()
+
+        assert.deepStrictEqual(
+            web3Result !== null && web3Result !== undefined,
+            true
+        )
+        assert.deepStrictEqual(ethersResult === null, true)
+    })
+
+    it("getEthersProvider test", () => {
+        const web3Result = web3Datasets.getEtherProvider()
+        const ethersResult = ethersDatasets.getEtherProvider()
+
+        assert.deepStrictEqual(
+            ethersResult !== null && ethersResult !== undefined,
+            true
+        )
+        assert.deepStrictEqual(web3Result === null, true)
     })
 
     it("getContract test", () => {
-        const result = datasets.getContract()
-        assert.deepStrictEqual(result !== null && result !== undefined, true)
+        const web3Result = web3Datasets.getContract()
+        const ethersResult = ethersDatasets.getContract()
+
+        assert.deepStrictEqual(
+            web3Result !== null && web3Result !== undefined,
+            true
+        )
+        assert.deepStrictEqual(
+            ethersResult !== null && ethersResult !== undefined,
+            true
+        )
     })
+
+    it("getEvmType test", () => {
+        const web3Result = web3Datasets.getEvmType()
+        const ethersResult = ethersDatasets.getEvmType()
+
+        assert.deepStrictEqual(web3Result, EvmType.Web3)
+        assert.deepStrictEqual(ethersResult, EvmType.Ethers)
+    })
+
     it("getContractABI test", () => {
-        const result = datasets.getContractABI()
-        assert.deepStrictEqual(result, DatasetABI.abi)
+        const web3Result = web3Datasets.getContractABI()
+        const ethersResult = ethersDatasets.getContractABI()
+
+        assert.deepStrictEqual(web3Result, DatasetABI.abi)
+        assert.deepStrictEqual(ethersResult, DatasetABI.abi)
     })
+
     it("getContractAddress test", () => {
-        const result = datasets.getContractAddress()
-        assert.deepStrictEqual(result, datasetContractAddress)
+        const web3Result = web3Datasets.getContractAddress()
+        const ethersResult = ethersDatasets.getContractAddress()
+
+        assert.deepStrictEqual(web3Result, datasetContractAddress)
+        assert.deepStrictEqual(ethersResult, datasetContractAddress)
     })
+
     it("getProviderUrl test", () => {
-        const result = datasets.getProviderUrl()
-        assert.deepStrictEqual(result, providerUrl)
+        const web3Result = web3Datasets.getProviderUrl()
+        const ethersResult = ethersDatasets.getProviderUrl()
+
+        assert.deepStrictEqual(web3Result, providerUrl)
+        assert.deepStrictEqual(ethersResult, providerUrl)
     })
 })

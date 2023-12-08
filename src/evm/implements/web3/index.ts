@@ -19,7 +19,9 @@ import {
     TransactionReceipt,
     AbiFunctionFragment,
     AbiInput,
+    Numbers,
 } from "web3"
+import { EtherUnits } from "web3-utils"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Result } from "@unipackage/utils"
 import type { Contract } from "web3-eth-contract"
@@ -28,6 +30,7 @@ import {
     EvmInput,
     EvmOutput,
     EvmTransactionOptions,
+    EvmType,
 } from "../../interface"
 import { IEVM, defaultTransactionOptions } from "../../interface"
 import {
@@ -85,6 +88,20 @@ export class Web3Evm implements IEVM {
             this.web3Object = new Web3(providerUrl)
             this.initContract(contractABI, contractAddress)
         }
+    }
+
+    /**
+     * Generates a value in Wei based on the provided number and unit.
+     *
+     * @param number - The number to convert to Wei.
+     * @param unit - The unit to convert the number to (e.g., Ether, Gwei).
+     * @returns The generated value in Wei as a string or bigint.
+     */
+    generateWei(number: Numbers, unit: EtherUnits): string {
+        if (!this.web3Object) {
+            throw new Error("web3 is not initialized!")
+        }
+        return this.web3Object.utils.toWei(number, unit)
     }
 
     /**
@@ -402,6 +419,15 @@ export class Web3Evm implements IEVM {
     }
 
     /**
+     * Get the EVM type.
+     *
+     * @returns The EVM type,Web3 or Ethers.
+     */
+    getEvmType(): EvmType {
+        return EvmType.Web3
+    }
+
+    /**
      * Get the EVM provider url.
      *
      * @returns The EVM provider url or null if not initialized.
@@ -409,17 +435,23 @@ export class Web3Evm implements IEVM {
     getProviderUrl(): string | undefined {
         return this.providerUrl
     }
+
+    /**
+     * Get the Ether Provider
+     *
+     * @returns Ether Provider object or null if not initialized.
+     */
+    getEtherProvider(): null {
+        return null
+    }
+
     /**
      * Web3 getter.
      *
      * @returns Web3 instance or null.
      */
     getWeb3(): Web3 | null {
-        if (this.web3Object) {
-            return this.web3Object
-        } else {
-            return null
-        }
+        return this.web3Object
     }
 
     /**

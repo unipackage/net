@@ -16,8 +16,9 @@
 import { Result } from "@unipackage/utils"
 import { InputParams } from "../../shared/types/params"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
-import { Signature as EtherSignature } from "ethers"
-import { Contract, Web3, AbiFunctionFragment } from "web3"
+import { Contract, Web3, AbiFunctionFragment, Numbers } from "web3"
+import { EtherUnits } from "web3-utils"
+import { ethers, JsonFragment, Contract as EtherContract } from "ethers"
 
 /**
  * Default transaction options for EVM transactions.
@@ -32,6 +33,11 @@ export const defaultTransactionOptions: EvmTransactionOptions = {
 export interface EvmDecodeOutPut {
     method: string
     params?: any
+}
+
+export enum EvmType {
+    Web3,
+    Ethers,
 }
 
 /**
@@ -100,7 +106,9 @@ export interface IEVM {
      * @param abi - The ABI function fragment.
      * @returns The encoded function signature or an error result.
      */
-    encodeFunctionSignatureByAbi(abi: AbiFunctionFragment): Result<string>
+    encodeFunctionSignatureByAbi(
+        abi: AbiFunctionFragment | JsonFragment
+    ): Result<string>
 
     /**
      * Encode function signature using the function name.
@@ -111,11 +119,20 @@ export interface IEVM {
     encodeFunctionSignatureByFuntionName(name: string): EvmOutput<string>
 
     /**
+     * Generates a value in Wei based on the provided number and unit.
+     *
+     * @param number - The number to convert to Wei.
+     * @param unit - The unit to convert the number to (e.g., Ether, Gwei).
+     * @returns The generated value in Wei as a string or bigint.
+     */
+    generateWei(number: Numbers, unit: EtherUnits): string | bigint
+
+    /**
      * Get the EVM contract.
      *
      * @returns The EVM contract object or null if not initialized.
      */
-    getContract(): Contract<AbiFunctionFragment[]> | null
+    getContract(): Contract<AbiFunctionFragment[]> | EtherContract | null
 
     /**
      * Get the EVM contract address.
@@ -129,7 +146,14 @@ export interface IEVM {
      *
      * @returns The EVM contract abi or null if not initialized.
      */
-    getContractABI(): AbiFunctionFragment[]
+    getContractABI(): AbiFunctionFragment[] | JsonFragment[]
+
+    /**
+     * Get the EVM type.
+     *
+     * @returns The EVM type,Web3 or Ethers.
+     */
+    getEvmType(): EvmType
 
     /**
      * Get the EVM provider url.
@@ -137,6 +161,13 @@ export interface IEVM {
      * @returns The EVM provider url or undefined not initialized.
      */
     getProviderUrl(): string | undefined
+
+    /**
+     * Get the Ether Provider
+     *
+     * @returns Ether Provider object or null if not initialized.
+     */
+    getEtherProvider(): ethers.AbstractProvider | null
 
     /**
      * Get the Web3 object.
@@ -163,7 +194,7 @@ export interface IEVM {
      * @param signed - The signed transaction data.
      * @returns A promise that resolves to the transaction result.
      */
-    sendSigned(signed: Web3Signature | EtherSignature): Promise<EvmOutput<any>>
+    sendSigned(signed: Web3Signature | string): Promise<EvmOutput<any>>
 
     /**
      * Sign a transaction on the EVM.
@@ -175,7 +206,7 @@ export interface IEVM {
     sign(
         input: EvmInput,
         options: EvmTransactionOptions
-    ): Promise<EvmOutput<Web3Signature | EtherSignature>>
+    ): Promise<EvmOutput<Web3Signature | string>>
 }
 
 /**
