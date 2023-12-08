@@ -18,6 +18,7 @@ export { InputParams } from "./shared/types/params"
 
 export {
     defaultTransactionOptions,
+    EvmType,
     EvmInput,
     EvmOutput,
     EvmDecodeOutPut,
@@ -26,6 +27,7 @@ export {
     isEvmTransactionOptions,
 } from "./evm/interface"
 export { Web3Evm } from "./evm/implements/web3"
+export { EthersEvm } from "./evm/implements/ether"
 export {
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
