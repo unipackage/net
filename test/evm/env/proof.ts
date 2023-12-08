@@ -8,6 +8,7 @@ import { providerUrl, proofContractAddress } from "./constant"
 interface Web3Proof {
     appendDatasetCollateral(...parmas: any[]): Promise<EvmOutput<any>>
 }
+//@ts-ignore
 @withMethods(["appendDatasetCollateral"], "send", isEvmTransactionOptions)
 class Web3Proof extends Web3Evm {}
 
@@ -20,6 +21,7 @@ export const web3Proof = new Web3Proof(
 interface EthersProof {
     appendDatasetCollateral(...parmas: any[]): Promise<EvmOutput<any>>
 }
+//@ts-ignore
 @withMethods(["appendDatasetCollateral"], "send", isEvmTransactionOptions)
 class EthersProof extends EthersEvm {}
 

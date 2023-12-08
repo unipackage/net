@@ -10,7 +10,9 @@ interface Web3Datasets {
     getDatasetMetadataSubmitter(id: number): Promise<EvmOutput<string>>
     submitDatasetMetadata(...parmas: any[]): Promise<EvmOutput<any>>
 }
+//@ts-ignore
 @withMethods(["getDatasetMetadata", "getDatasetMetadataSubmitter"], "call")
+//@ts-ignore
 @withMethods(["submitDatasetMetadata"], "send", isEvmTransactionOptions)
 class Web3Datasets extends Web3Evm {}
 
@@ -25,7 +27,9 @@ interface EthersDatasets {
     getDatasetMetadataSubmitter(id: number): Promise<EvmOutput<string>>
     submitDatasetMetadata(...parmas: any[]): Promise<EvmOutput<any>>
 }
+//@ts-ignore
 @withMethods(["getDatasetMetadata", "getDatasetMetadataSubmitter"], "call")
+//@ts-ignore
 @withMethods(["submitDatasetMetadata"], "send", isEvmTransactionOptions)
 class EthersDatasets extends EthersEvm {}
 
