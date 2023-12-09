@@ -1,3 +1,18 @@
+/*******************************************************************************
+ *   (c) 2023 unipackage
+ *
+ *  Licensed under the GNU General Public License, Version 3.0 or later (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ********************************************************************************/
 import {
     InterfaceAbi,
     Contract,
@@ -30,6 +45,9 @@ declare global {
     }
 }
 
+/**
+ * Class representing a EthersEvm instance.
+ */
 export class EthersEvm implements IEVM {
     private provider: ethers.JsonRpcProvider | ethers.BrowserProvider | null =
         null
@@ -38,6 +56,14 @@ export class EthersEvm implements IEVM {
     private contractABI: InterfaceAbi
     private providerUrl: string | undefined = undefined
 
+    /**
+     * Constructor for EthersEvm class.
+     *
+     * @TODO test window.ethereum
+     * @param contractABI - The contract's ABI.
+     * @param contractAddress - The contract's address.
+     * @param providerUrl - The provider URL.
+     */
     constructor(
         contractABI: InterfaceAbi,
         contractAddress: string,
