@@ -108,8 +108,6 @@ export class Web3Evm implements IEVM {
     /**
      * Generates a transaction based on input and options.
      *
-     * @TODO  estimate gas
-     * @TODO  debug maxFeePerGas,maxPriorityFeePerGas
      * @param input - The EVM input.
      * @param options - The transaction options.
      * @returns A promise resolving to EvmOutput object with the transaction.
@@ -145,15 +143,24 @@ export class Web3Evm implements IEVM {
                 }
             }
 
-            const txObject: Web3Transaction = {
+            const txOriginObject: Web3Transaction = {
                 ...defaultTransactionOptions,
+                from: options.from,
                 to: this.contractAddress,
-                gas: 200000000,
-                maxFeePerGas: this.web3Object.utils.toWei("10", "gwei"),
-                maxPriorityFeePerGas: this.web3Object.utils.toWei("1", "gwei"),
                 nonce: nonce,
                 ...options,
                 data: dataResult.data,
+            }
+            const gas = await this.web3Object.eth.estimateGas(txOriginObject)
+            const gasPrice = Number(await this.web3Object.eth.getGasPrice())
+            const maxPriorityFeePerGas = gasPrice * 1
+            const maxFeePerGas = gasPrice * 2 + maxPriorityFeePerGas
+
+            const txObject = {
+                ...txOriginObject,
+                gas,
+                maxFeePerGas,
+                maxPriorityFeePerGas,
             }
 
             return { ok: true, data: txObject }

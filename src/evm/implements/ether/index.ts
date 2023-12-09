@@ -103,8 +103,6 @@ export class EthersEvm implements IEVM {
     /**
      * Generates a transaction based on input and options.
      *
-     * @TODO  estimate gas
-     * @TODO  debug maxFeePerGas,maxPriorityFeePerGas
      * @param input - The EVM input.
      * @param options - The transaction options.
      * @returns A promise resolving to EvmOutput object with the transaction.
@@ -140,6 +138,7 @@ export class EthersEvm implements IEVM {
 
             const txOriginObject = {
                 ...defaultTransactionOptions,
+                from: options.from,
                 to: this.contractAddress,
                 nonce: nonce,
                 ...options,
