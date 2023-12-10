@@ -14,11 +14,16 @@
  *  limitations under the License.
  ********************************************************************************/
 
-import { RPCRequest, RPCResponse, RPCOptions } from "../../interface"
-import { RPCEngine, DefaultOptions } from ".."
+import {
+    IRPC,
+    RPCRequest,
+    RPCResponse,
+    RPCOptions,
+    DefaultOptions,
+} from "../../interface"
 import LotusRpcEngine, { LotusRpcEngineConfig } from "@glif/filecoin-rpc-client"
 
-export class FilecoinRPCEngine extends RPCEngine {
+export class FilecoinRPC implements IRPC {
     private engine: LotusRpcEngine
     private defaultOptions: RPCOptions
 
@@ -29,7 +34,6 @@ export class FilecoinRPCEngine extends RPCEngine {
      * @param defaultOptions - Default RPCOptions.
      */
     constructor(config: LotusRpcEngineConfig, defaultOptions?: RPCOptions) {
-        super()
         this.engine = new LotusRpcEngine(config)
         this.defaultOptions = defaultOptions ? defaultOptions : DefaultOptions
     }
