@@ -17,9 +17,9 @@
 import DatasetProofAbi from "../testAbi/DatasetsProof.json"
 import { Web3Evm } from "../../../src/evm/implements/web3"
 import { EthersEvm } from "../../../src/evm/implements/ether"
-import { withMethods } from "../../../src/shared/withMethods"
 import { EvmOutput, isEvmTransactionOptions } from "../../../src/evm/interface"
 import { providerUrl, proofContractAddress } from "./constant"
+import { withSendMethod } from "../../../src/evm/withMethod"
 
 /**
  * Interface for Web3Proof containing specific methods.
@@ -29,7 +29,7 @@ interface Web3Proof {
 }
 
 //@ts-ignore
-@withMethods(["appendDatasetCollateral"], "send", isEvmTransactionOptions)
+@withSendMethod(["appendDatasetCollateral"])
 /**
  * Decorated class for Web3Evm implementation of Proof.
  */
@@ -52,7 +52,7 @@ interface EthersProof {
 }
 
 //@ts-ignore
-@withMethods(["appendDatasetCollateral"], "send", isEvmTransactionOptions)
+@withSendMethod(["appendDatasetCollateral"])
 /**
  * Decorated class for EthersEvm implementation of Proof.
  */

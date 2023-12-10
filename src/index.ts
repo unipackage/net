@@ -26,7 +26,7 @@ export {
     DefaultOptions,
 } from "./rpc/interface"
 export { FilecoinRPC } from "./rpc/implements/filecoin"
-export { registerMethod } from "./rpc/registerMethod"
+export { withRequestMethod } from "./rpc/withMethod"
 
 export { withMethods } from "./shared/withMethods"
 export { InputParams } from "./shared/types/params"
@@ -47,3 +47,4 @@ export {
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
 } from "./evm/implements/web3/tools"
+export { withCallMethod, withSendMethod } from "./evm/withMethod"

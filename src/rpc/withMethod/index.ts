@@ -23,6 +23,6 @@ import { withMethods } from "../../shared/withMethods"
  * @param methods - An array of method names to be added.
  * @returns A ClassDecorator function.
  */
-export function registerMethod(methods: string[]): ClassDecorator {
+export function withRequestMethod(methods: string[]): ClassDecorator {
     return withMethods(methods, "request", isRPCOptions)
 }

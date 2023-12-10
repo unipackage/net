@@ -16,7 +16,7 @@
 
 import { RPCResponse } from "../../../../src/rpc/interface"
 import { FilecoinRPC } from "../../../../src/rpc/implements/filecoin"
-import { registerMethod } from "../../../../src/rpc/registerMethod"
+import { withRequestMethod } from "../../../../src/rpc/withMethod"
 
 /**
  * Represents the methods associated with the ChainRPC.
@@ -28,7 +28,7 @@ interface ChainRPC {
 
 // Decorate the ChainRPC class with dynamically generated methods
 //@ts-ignore
-@registerMethod(["ChainHead", "ChainGetTipSetByHeight"])
+@withRequestMethod(["ChainHead", "ChainGetTipSetByHeight"])
 class ChainRPC extends FilecoinRPC {}
 
 // Constants for Lotus API endpoint and token

@@ -17,9 +17,9 @@
 import DatasetsAbi from "../testAbi/Datasets.json"
 import { Web3Evm } from "../../../src/evm/implements/web3"
 import { EthersEvm } from "../../../src/evm/implements/ether"
-import { withMethods } from "../../../src/shared/withMethods"
 import { EvmOutput, isEvmTransactionOptions } from "../../../src/evm/interface"
 import { datasetContractAddress, providerUrl } from "./constant"
+import { withCallMethod, withSendMethod } from "../../../src/evm/withMethod"
 
 /**
  * Interface for Web3Datasets containing specific methods.
@@ -31,9 +31,9 @@ interface Web3Datasets {
 }
 
 //@ts-ignore
-@withMethods(["getDatasetMetadata", "getDatasetMetadataSubmitter"], "call")
+@withCallMethod(["getDatasetMetadata", "getDatasetMetadataSubmitter"])
 //@ts-ignore
-@withMethods(["submitDatasetMetadata"], "send", isEvmTransactionOptions)
+@withSendMethod(["submitDatasetMetadata"])
 /**
  * Decorated class for Web3Evm implementation of Datasets.
  */
@@ -58,9 +58,9 @@ interface EthersDatasets {
 }
 
 //@ts-ignore
-@withMethods(["getDatasetMetadata", "getDatasetMetadataSubmitter"], "call")
+@withCallMethod(["getDatasetMetadata", "getDatasetMetadataSubmitter"])
 //@ts-ignore
-@withMethods(["submitDatasetMetadata"], "send", isEvmTransactionOptions)
+@withSendMethod(["submitDatasetMetadata"])
 /**
  * Decorated class for EthersEvm implementation of Datasets.
  */
