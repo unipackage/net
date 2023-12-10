@@ -14,6 +14,12 @@ jobs:
         env:
             METADATASUBMITTERKEY: ${{ secrets.METADATASUBMITTERKEY }}
             PROOFSUBMITTERKEY: ${{ secrets.PROOFSUBMITTERKEY }}
+            PROVIDER_URL: ${{ vars.PROVIDER_URL }}
+            DATASET_CONTRACT_ADDRESS: ${{ vars.DATASET_CONTRACT_ADDRESS }}
+            METADATA_SUBMITTER: ${{ vars.METADATA_SUBMITTER }}
+            PROOF_CONTRACT_ADDRESS: ${{ vars.PROOF_CONTRACT_ADDRESS }}
+            PROOF_SUBMITTER: ${{ vars.PROOF_SUBMITTER }}
+            LOTUS_API_ENDPOINT: ${{ vars.LOTUS_API_ENDPOINT }}
         steps:
             - uses: actions/checkout@v3
             - name: Use Node.js ${{ matrix.node-version }}
