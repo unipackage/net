@@ -20,7 +20,7 @@ import { Context } from "mocha"
 import { Web3 } from "web3"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { web3Proof, ethersProof } from "./env/proof"
-import { proofSubmitter, proofSubmitterKey } from "./env/constant"
+import { proofSubmitter } from "./env/constant"
 
 describe("Sign and sendSigned test(By privateKey) ", () => {
     it("web3 correct test", async function (this: Context) {
@@ -29,7 +29,7 @@ describe("Sign and sendSigned test(By privateKey) ", () => {
             { method: "appendDatasetCollateral", params: [1] },
             {
                 from: proofSubmitter,
-                privateKey: proofSubmitterKey,
+                privateKey: process.env.PROOFSUBMITTERKEY,
                 value: web3Proof.generateWei("1", "gwei"),
             }
         )
@@ -47,7 +47,7 @@ describe("Sign and sendSigned test(By privateKey) ", () => {
             { method: "appendDatasetCollateral", params: [1] },
             {
                 from: proofSubmitter,
-                privateKey: proofSubmitterKey,
+                privateKey: process.env.PROOFSUBMITTERKEY,
                 value: ethersProof.generateWei("1", "gwei"),
             }
         )
