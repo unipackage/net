@@ -58,6 +58,19 @@ export interface RPCOptions {
 }
 
 /**
+ * Default RPC configuration options.
+ */
+export const DefaultOptions: RPCOptions = {
+    retryRules: {
+        retries: 3,
+        interval: 1000,
+    },
+    resultRules: {
+        acceptUndefined: false,
+    },
+}
+
+/**
  * Type guard function to check whether an object conforms to the RPCOptions interface.
  *
  * @param obj - The object to be checked.

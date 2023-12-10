@@ -14,7 +14,6 @@
  *  limitations under the License.
  ********************************************************************************/
 
-export { RPC } from "./rpc"
 export {
     IRPC,
     RPCEngineConfig,
@@ -24,9 +23,9 @@ export {
     RPCResultRulesOptions,
     RPCRetryOptions,
     isRPCOptions,
+    DefaultOptions,
 } from "./rpc/interface"
-export { RPCEngine, DefaultOptions } from "./rpc/engine"
-export { FilecoinRPCEngine } from "./rpc/engine/lotus/filecoinRPCEngine"
+export { FilecoinRPC } from "./rpc/implements/filecoin"
 export { registerMethod } from "./rpc/registerMethod"
 
 export { withMethods } from "./shared/withMethods"
