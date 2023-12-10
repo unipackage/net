@@ -17,9 +17,10 @@
 import DatasetsAbi from "../testAbi/Datasets.json"
 import { Web3Evm } from "../../../src/evm/implements/web3"
 import { EthersEvm } from "../../../src/evm/implements/ether"
-import { EvmOutput, isEvmTransactionOptions } from "../../../src/evm/interface"
-import { datasetContractAddress, providerUrl } from "./constant"
+import { EvmOutput } from "../../../src/evm/interface"
 import { withCallMethod, withSendMethod } from "../../../src/evm/withMethod"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 /**
  * Interface for Web3Datasets containing specific methods.
@@ -44,8 +45,8 @@ class Web3Datasets extends Web3Evm {}
  */
 export const web3Datasets = new Web3Datasets(
     DatasetsAbi.abi,
-    datasetContractAddress,
-    providerUrl
+    process.env.DATASET_CONTRACT_ADDRESS as string,
+    process.env.PROVIDER_URL as string
 )
 
 /**
@@ -71,6 +72,6 @@ class EthersDatasets extends EthersEvm {}
  */
 export const ethersDatasets = new EthersDatasets(
     DatasetsAbi.abi,
-    datasetContractAddress,
-    providerUrl
+    process.env.DATASET_CONTRACT_ADDRESS as string,
+    process.env.PROVIDER_URL as string
 )

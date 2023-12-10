@@ -17,9 +17,10 @@
 import assert from "assert"
 import { it } from "mocha"
 import { web3Datasets, ethersDatasets } from "./env/datasets"
-import { datasetContractAddress, providerUrl } from "./env/constant"
 import DatasetABI from "./testAbi/Datasets.json"
 import { EvmType } from "../../src/evm/interface"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 //@ts-ignore
 describe("Get test", () => {
@@ -79,15 +80,18 @@ describe("Get test", () => {
         const web3Result = web3Datasets.getContractAddress()
         const ethersResult = ethersDatasets.getContractAddress()
 
-        assert.deepStrictEqual(web3Result, datasetContractAddress)
-        assert.deepStrictEqual(ethersResult, datasetContractAddress)
+        assert.deepStrictEqual(web3Result, process.env.DATASET_CONTRACT_ADDRESS)
+        assert.deepStrictEqual(
+            ethersResult,
+            process.env.DATASET_CONTRACT_ADDRESS
+        )
     })
 
     it("getProviderUrl test", () => {
         const web3Result = web3Datasets.getProviderUrl()
         const ethersResult = ethersDatasets.getProviderUrl()
 
-        assert.deepStrictEqual(web3Result, providerUrl)
-        assert.deepStrictEqual(ethersResult, providerUrl)
+        assert.deepStrictEqual(web3Result, process.env.PROVIDER_URL)
+        assert.deepStrictEqual(ethersResult, process.env.PROVIDER_URL)
     })
 })

@@ -17,9 +17,10 @@
 import DatasetProofAbi from "../testAbi/DatasetsProof.json"
 import { Web3Evm } from "../../../src/evm/implements/web3"
 import { EthersEvm } from "../../../src/evm/implements/ether"
-import { EvmOutput, isEvmTransactionOptions } from "../../../src/evm/interface"
-import { providerUrl, proofContractAddress } from "./constant"
+import { EvmOutput } from "../../../src/evm/interface"
 import { withSendMethod } from "../../../src/evm/withMethod"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 /**
  * Interface for Web3Proof containing specific methods.
@@ -40,8 +41,8 @@ class Web3Proof extends Web3Evm {}
  */
 export const web3Proof = new Web3Proof(
     DatasetProofAbi.abi,
-    proofContractAddress,
-    providerUrl
+    process.env.PROOF_CONTRACT_ADDRESS as string,
+    process.env.PROVIDER_URL as string
 )
 
 /**
@@ -63,6 +64,6 @@ class EthersProof extends EthersEvm {}
  */
 export const ethersProof = new EthersProof(
     DatasetProofAbi.abi,
-    proofContractAddress,
-    providerUrl
+    process.env.PROOF_CONTRACT_ADDRESS as string,
+    process.env.PROVIDER_URL as string
 )

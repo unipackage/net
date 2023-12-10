@@ -18,15 +18,16 @@ import assert from "assert"
 import { it } from "mocha"
 import { Context } from "mocha"
 import { web3Proof, ethersProof } from "./env/proof"
-import { proofSubmitter } from "./env/constant"
 import Web3 from "web3"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 describe("SendValue test(By privateKey) ", () => {
     it("web3 correct test", async function (this: Context) {
         this.timeout(100000)
 
         const web3Result = await web3Proof.appendDatasetCollateral(1, {
-            from: proofSubmitter,
+            from: process.env.PROOF_SUBMITTER,
             privateKey: process.env.PROOFSUBMITTERKEY,
             value: web3Proof.generateWei("1", "gwei"),
         })
@@ -41,7 +42,7 @@ describe("SendValue test(By privateKey) ", () => {
         this.timeout(100000)
 
         const ethersResult = await ethersProof.appendDatasetCollateral(1, {
-            from: proofSubmitter,
+            from: process.env.PROOF_SUBMITTER,
             privateKey: process.env.PROOFSUBMITTERKEY,
             value: ethersProof.generateWei("1", "gwei"),
         })

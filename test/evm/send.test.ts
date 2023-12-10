@@ -19,7 +19,8 @@ import { it } from "mocha"
 import { Context } from "mocha"
 import { web3Datasets, ethersDatasets } from "./env/datasets"
 import { generateRandomString } from "../tools/utils/randomString"
-import { metadataSubmitter } from "./env/constant"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 describe("Send test(By privateKey)", () => {
     it("web3 correct test", async function (this: Context) {
@@ -35,7 +36,7 @@ describe("Send test(By privateKey)", () => {
             true,
             1,
             {
-                from: metadataSubmitter,
+                from: process.env.METADATA_SUBMITTER,
                 privateKey: process.env.METADATASUBMITTERKEY,
             },
         ]
@@ -67,7 +68,7 @@ describe("Send test(By privateKey)", () => {
             true,
             1,
             {
-                from: metadataSubmitter,
+                from: process.env.METADATA_SUBMITTER,
                 privateKey: process.env.METADATASUBMITTERKEY,
             },
         ]

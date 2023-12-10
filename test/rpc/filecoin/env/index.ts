@@ -17,6 +17,8 @@
 import { RPCResponse } from "../../../../src/rpc/interface"
 import { FilecoinRPC } from "../../../../src/rpc/implements/filecoin"
 import { withRequestMethod } from "../../../../src/rpc/withMethod"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 /**
  * Represents the methods associated with the ChainRPC.
@@ -31,14 +33,10 @@ interface ChainRPC {
 @withRequestMethod(["ChainHead", "ChainGetTipSetByHeight"])
 class ChainRPC extends FilecoinRPC {}
 
-// Constants for Lotus API endpoint and token
-const LOTUS_API_ENDPOINT = "https://api.calibration.node.glif.io/rpc/v1"
-const LOTUS_TOKEN = undefined
-
 /**
  * ChainRPC instance to interact with the Filecoin chain.
  */
 export const chainRPC = new ChainRPC({
-    apiAddress: LOTUS_API_ENDPOINT,
-    token: LOTUS_TOKEN,
+    apiAddress: process.env.LOTUS_API_ENDPOINT as string,
+    token: process.env.LOTUS_TOKEN,
 })
