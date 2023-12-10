@@ -1,5 +1,17 @@
 
 
+# [1.0.0](https://github.com/unipackage/net/compare/v0.3.2...v1.0.0) (2023-12-10)
+
+
+### Bug Fixes
+
+* 🐛 decodeTxinput in ethers ([0e11bd4](https://github.com/unipackage/net/commit/0e11bd461c36402f26a5571fdc54db510c5352fd))
+
+
+### BREAKING CHANGES
+
+* 🧨 decodeTxInput change to decodeTxinputToEvmInput
+
 ## [0.3.2](https://github.com/unipackage/net/compare/v0.3.1...v0.3.2) (2023-12-10)
 
 
