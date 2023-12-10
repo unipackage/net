@@ -1,45 +1,81 @@
-name: Release on Version Change
+name: Version and Release
 
 on:
-    workflow_dispatch:
     push:
-        branches: ["main"]
-    pull_request:
-        branches: ["main"]
+        branches:
+            - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-    check-version:
+    versioning:
+        name: Versioning
         runs-on: macos-latest
-        strategy:
-            matrix:
-                node-version: [18.x]
+        outputs:
+            hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
+            version: ${{ steps.version.outputs.CURRENT_VERSION }}
         steps:
-            - uses: actions/checkout@v3
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v3
+            - name: Checkout Repo
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js 18.x
+              uses: actions/setup-node@v2
               with:
-                  node-version: ${{ matrix.node-version }}
+                  node-version: 18.x
 
-            - name: Checkout repository
-              uses: actions/checkout@v2
+            - name: Install Dependencies
+              run: npm install
 
-            # Get the previous version from Git tags
-            - name: Get previous version
-              id: prev_version
-              run: echo "{previous}={$(git describe --tags --abbrev=0)}" >> $GITHUB_STATE
+            - name: Create Release Pull Request
+              id: changesets
+              uses: changesets/action@v1
+              with:
+                  commit: "Version Action"
+                  title: "Version Action"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # Get the current version from package.json
             - name: Get current version
-              id: current_version
-              run: echo "{current}={$(node -p "require('./package.json').version")}" >> $GITHUB_STATE
+              id: version
+              run: echo "CURRENT_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-            # Compare the previous and current versions
-            - name: Compare versions
+    release:
+        name: Release
+        runs-on: ubuntu-latest
+        needs: versioning
+        if: needs.versioning.outputs.hasChangesets == 'false'
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Configure git
               run: |
-                  if [ "${{ steps.current_version.outputs.current }}" != "${{ steps.prev_version.outputs.previous }}" ]; then
-                    echo "Version has changed! Creating tag and publishing to npm..."
-                    # Perform tag creation and npm publishing here
-                    # Replace this comment with the actual commands
-                  else
-                    echo "No version change detected."
-                  fi
+                  git config user.name github-actions[bot]
+                  git config user.email github-actions[bot]@users.noreply.github.com
+            - name: Setup Node.js 16.x
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 16.x
+
+            - name: Publish tags
+              id: publish
+              uses: ./.github/actions/publish
+              with:
+                  version: ${{ needs.versioning.outputs.version }}
+
+            - name: Get release notes
+              id: notes
+              if: steps.publish.outputs.published == 'true'
+              uses: ./.github/actions/get-release-notes
+              with:
+                  version: ${{ needs.versioning.outputs.version }}
+                  changelog: ./CHANGELOG.md
+
+            - name: Create release
+              if: steps.notes.outputs.release_notes
+              uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5
+              with:
+                  body: ${{ steps.notes.outputs.release_notes }}
+                  tag_name: v${{ needs.versioning.outputs.version }}
