@@ -1,5 +1,12 @@
 
 
+## [0.3.2](https://github.com/unipackage/net/compare/v0.3.1...v0.3.2) (2023-12-10)
+
+
+### Bug Fixes
+
+* 🐛 window is unnormal ([c2e2d7a](https://github.com/unipackage/net/commit/c2e2d7ab5edd1c144ec67944509a9b036c0f2719))
+
 ## [0.3.1](https://github.com/unipackage/net/compare/v0.3.0...v0.3.1) (2023-12-10)
 
 # [0.3.0](https://github.com/unipackage/net/compare/v0.2.1...v0.3.0) (2023-12-10)
