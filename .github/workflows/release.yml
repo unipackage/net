@@ -1,0 +1,45 @@
+name: Release on Version Change
+
+on:
+    workflow_dispatch:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    check-version:
+        runs-on: macos-latest
+        strategy:
+            matrix:
+                node-version: [18.x]
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            # Get the previous version from Git tags
+            - name: Get previous version
+              id: prev_version
+              run: echo "::set-output name=previous::$(git describe --tags --abbrev=0)"
+
+            # Get the current version from package.json
+            - name: Get current version
+              id: current_version
+              run: echo "::set-output name=current::$(node -p "require('./package.json').version")"
+
+            # Compare the previous and current versions
+            - name: Compare versions
+              run: |
+                  if [ "${{ steps.current_version.outputs.current }}" != "${{ steps.prev_version.outputs.previous }}" ]; then
+                    echo "Version has changed! Creating tag and publishing to npm..."
+                    # Perform tag creation and npm publishing here
+                    # Replace this comment with the actual commands
+                  else
+                    echo "No version change detected."
+                  fi
