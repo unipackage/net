@@ -74,7 +74,7 @@ export class EthersEvm implements IEVM {
         this.providerUrl = providerUrl
 
         if (!providerUrl) {
-            if (window.ethereum) {
+            if (typeof window !== "undefined" && window.ethereum) {
                 this.provider = new ethers.BrowserProvider(window.ethereum)
             } else {
                 throw new Error("window.ethereum is not available")

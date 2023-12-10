@@ -78,10 +78,14 @@ export class Web3Evm implements IEVM {
 
         if (!providerUrl) {
             try {
-                this.web3Object = new Web3(window.ethereum)
-                window.ethereum.enable().then(() => {
-                    this.initContract(contractABI, contractAddress)
-                })
+                if (typeof window !== "undefined" && window.ethereum) {
+                    this.web3Object = new Web3(window.ethereum)
+                    window.ethereum.enable().then(() => {
+                        this.initContract(contractABI, contractAddress)
+                    })
+                } else {
+                    throw new Error("window is unnormal!")
+                }
             } catch (error) {
                 console.error("Error enabling window ethereum accounts:", error)
             }
