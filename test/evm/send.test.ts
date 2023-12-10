@@ -14,9 +14,9 @@
  *  limitations under the License.
  ********************************************************************************/
 
-var assert = require("assert")
+import assert from "assert"
+import { it } from "mocha"
 import { Context } from "mocha"
-const { it } = require("mocha")
 import { web3Datasets, ethersDatasets } from "./env/datasets"
 import { generateRandomString } from "../tools/utils/randomString"
 import { metadataSubmitter, metadataSubmitterKey } from "./env/constant"

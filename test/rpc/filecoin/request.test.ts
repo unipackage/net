@@ -14,8 +14,8 @@
  *  limitations under the License.
  ********************************************************************************/
 
-var assert = require("assert")
-const { it } = require("mocha")
+import assert from "assert"
+import { it } from "mocha"
 import { chainRPC } from "./env/index"
 
 //@ts-ignore

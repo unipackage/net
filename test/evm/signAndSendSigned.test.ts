@@ -14,11 +14,11 @@
  *  limitations under the License.
  ********************************************************************************/
 
-var assert = require("assert")
+import assert from "assert"
+import { it } from "mocha"
+import { Context } from "mocha"
 import { Web3 } from "web3"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
-import { Context } from "mocha"
-const { it } = require("mocha")
 import { web3Proof, ethersProof } from "./env/proof"
 import { proofSubmitter, proofSubmitterKey } from "./env/constant"
 

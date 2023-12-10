@@ -13,9 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ********************************************************************************/
-
-var assert = require("assert")
-const { it } = require("mocha")
+import assert from "assert"
+import { it } from "mocha"
 import { web3Datasets, ethersDatasets } from "./env/datasets"
 
 const txInput =
