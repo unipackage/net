@@ -12,8 +12,8 @@ jobs:
             matrix:
                 node-version: [18.x]
         env:
-            METADATASUBMITTERKEY: ${{ secrets.METADATASUBMITTERKEY }}
-            PROOFSUBMITTERKEY: ${{ secrets.PROOFSUBMITTERKEY }}
+            METADATASUBMITTERKEY: ${{ vars.METADATASUBMITTERKEY }}
+            PROOFSUBMITTERKEY: ${{ vars.PROOFSUBMITTERKEY }}
             PROVIDER_URL: ${{ vars.PROVIDER_URL }}
             DATASET_CONTRACT_ADDRESS: ${{ vars.DATASET_CONTRACT_ADDRESS }}
             METADATA_SUBMITTER: ${{ vars.METADATA_SUBMITTER }}
