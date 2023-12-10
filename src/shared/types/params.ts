@@ -19,5 +19,5 @@
  */
 export interface InputParams {
     method: string // The name of the method to be invoked.
-    params?: any // Optional parameters for the method.
+    params?: any[] // Optional parameters for the method.
 }

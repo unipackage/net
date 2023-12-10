@@ -16,11 +16,12 @@
 import assert from "assert"
 import { it } from "mocha"
 import { web3Datasets, ethersDatasets } from "./env/datasets"
+import { web3Proof, ethersProof } from "./env/proof"
 
 const txInput =
     "0xa31e76710000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001e000000000000000000000000000000000000000000000000000000000000002200000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000001e84800000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000a5367757a46505851584e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a347373674f3836327a7500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a457758386353716d4d3900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a644d6e4658505550613300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a7452393954375947326c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a4c4d32744d365157343800000000000000000000000000000000000000000000"
 const txInputOnlyOneParam =
-    "0xe4714ed80000000000000000000000000000000000000000000000000000000000000001"
+    "0x38835e730000000000000000000000000000000000000000000000000000000000000001"
 
 const evmInput = {
     ok: true,
@@ -39,10 +40,11 @@ const evmInput = {
         ],
     },
 }
+
 const evmInputOnlyOneParam = {
     ok: true,
     data: {
-        method: "approveDatasetMetadata",
+        method: "appendDatasetCollateral",
         params: [BigInt(1)],
     },
 }
@@ -64,7 +66,7 @@ describe("Encoding and decoding test", () => {
 
         it("web3 correct test(one param)", () => {
             const web3Decode =
-                web3Datasets.decodeTxInputToEvmInput(txInputOnlyOneParam)
+                web3Proof.decodeTxInputToEvmInput(txInputOnlyOneParam)
             assert.deepStrictEqual(web3Decode, evmInputOnlyOneParam)
         })
 
@@ -75,7 +77,7 @@ describe("Encoding and decoding test", () => {
 
         it("ethers correct test(one param)", () => {
             const ethersDecode =
-                ethersDatasets.decodeTxInputToEvmInput(txInputOnlyOneParam)
+                ethersProof.decodeTxInputToEvmInput(txInputOnlyOneParam)
             assert.deepStrictEqual(ethersDecode, evmInputOnlyOneParam)
         })
 
@@ -108,7 +110,7 @@ describe("Encoding and decoding test", () => {
         })
 
         it("web3 correct test(one param)", () => {
-            const web3Txinput = web3Datasets.encodeEvmInputToTxinput(
+            const web3Txinput = web3Proof.encodeEvmInputToTxinput(
                 evmInputOnlyOneParam.data
             )
             assert.deepStrictEqual(web3Txinput.data, txInputOnlyOneParam)
@@ -122,14 +124,10 @@ describe("Encoding and decoding test", () => {
         })
 
         it("ethers correct test(one param)", () => {
-            const ethersTxinputNotArray =
-                ethersDatasets.encodeEvmInputToTxinput(
-                    evmInputOnlyOneParam.data
-                )
-            assert.deepStrictEqual(
-                ethersTxinputNotArray.data,
-                txInputOnlyOneParam
+            const ethersTxinput = ethersProof.encodeEvmInputToTxinput(
+                evmInputOnlyOneParam.data
             )
+            assert.deepStrictEqual(ethersTxinput.data, txInputOnlyOneParam)
         })
     })
 
