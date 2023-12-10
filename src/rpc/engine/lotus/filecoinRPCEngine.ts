@@ -1,3 +1,19 @@
+/*******************************************************************************
+ *   (c) 2023 unipackage
+ *
+ *  Licensed under the GNU General Public License, Version 3.0 or later (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ********************************************************************************/
+
 import { RPCRequest, RPCResponse, RPCOptions } from "../../interface"
 import { RPCEngine, DefaultOptions } from ".."
 import LotusRpcEngine, { LotusRpcEngineConfig } from "@glif/filecoin-rpc-client"
@@ -6,12 +22,25 @@ export class FilecoinRPCEngine extends RPCEngine {
     private engine: LotusRpcEngine
     private defaultOptions: RPCOptions
 
+    /**
+     * Constructs a FilecoinRPCEngine instance.
+     *
+     * @param config - Configuration for the LotusRpcEngine.
+     * @param defaultOptions - Default RPCOptions.
+     */
     constructor(config: LotusRpcEngineConfig, defaultOptions?: RPCOptions) {
         super()
         this.engine = new LotusRpcEngine(config)
         this.defaultOptions = defaultOptions ? defaultOptions : DefaultOptions
     }
 
+    /**
+     * Sends an RPC request using the configured LotusRpcEngine with optional options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Optional configuration options for the request.
+     * @returns A promise resolving to an RPCResponse.
+     */
     public async request(
         request: RPCRequest,
         options: RPCOptions = {}
@@ -20,6 +49,13 @@ export class FilecoinRPCEngine extends RPCEngine {
         return await this.retryRequest(request, options)
     }
 
+    /**
+     * Sends an RPC request using the configured LotusRpcEngine with optional options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Optional configuration options for the request.
+     * @returns A promise resolving to an RPCResponse.
+     */
     private async engineRequest(
         request: RPCRequest,
         options?: RPCOptions
@@ -49,6 +85,13 @@ export class FilecoinRPCEngine extends RPCEngine {
         return result
     }
 
+    /**
+     * Handles retry logic for an RPC request based on the provided options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Configuration options for the request and retries.
+     * @returns A promise resolving to an RPCResponse.
+     */
     private async retryRequest(
         request: RPCRequest,
         options?: RPCOptions
