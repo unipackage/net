@@ -26,12 +26,12 @@ jobs:
             # Get the previous version from Git tags
             - name: Get previous version
               id: prev_version
-              run: echo "::set-output name=previous::$(git describe --tags --abbrev=0)"
+              run: echo "::save-state name=previous::$(git describe --tags --abbrev=0)"
 
             # Get the current version from package.json
             - name: Get current version
               id: current_version
-              run: echo "::set-output name=current::$(node -p "require('./package.json').version")"
+              run: echo "::save-state name=current::$(node -p "require('./package.json').version")"
 
             # Compare the previous and current versions
             - name: Compare versions
