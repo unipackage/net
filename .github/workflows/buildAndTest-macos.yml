@@ -1,4 +1,4 @@
-name: test
+name: build
 on:
     workflow_dispatch:
     push:
@@ -6,7 +6,7 @@ on:
     pull_request:
         branches: ["main"]
 jobs:
-    test:
+    build:
         runs-on: macos-latest
         strategy:
             matrix:
@@ -20,18 +20,12 @@ jobs:
 
             - name: Checkout repository
               uses: actions/checkout@v2
-            - name: Cache dependencies
-              uses: actions/cache@v2
-              with:
-                  path: |
-                      ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/*.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
-                      ${{ runner.os }}-
             - name: Install dependencies
               run: |
                   npm install
+            - name: Build
+              run: |
+                  npm run build
             - name: Test
               run: |
                   npm run test
