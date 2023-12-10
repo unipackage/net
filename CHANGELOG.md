@@ -1,5 +1,12 @@
 
 
+## [1.0.1](https://github.com/unipackage/net/compare/v1.0.0...v1.0.1) (2023-12-10)
+
+
+### Bug Fixes
+
+* 🐛 EvmInput params type change to any[] ([d18822b](https://github.com/unipackage/net/commit/d18822b2b04eb8fc06a36e94536d2ec8074b2598))
+
 # [1.0.0](https://github.com/unipackage/net/compare/v0.3.2...v1.0.0) (2023-12-10)
 
 
