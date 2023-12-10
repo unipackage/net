@@ -27,7 +27,6 @@ import {
 import { EtherUnits } from "web3-utils"
 import { Result } from "@unipackage/utils"
 import {
-    EvmDecodeOutPut,
     EvmInput,
     EvmOutput,
     EvmTransactionOptions,
@@ -205,7 +204,7 @@ export class EthersEvm implements IEVM {
      * @param txInput - The transaction input data.
      * @returns A promise that resolves to the decoded output.
      */
-    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut> {
+    decodeTxInputToEvmInput(txInput: string): EvmOutput<EvmInput> {
         if (!this.contract) {
             return {
                 ok: false,
@@ -216,11 +215,15 @@ export class EthersEvm implements IEVM {
             const abi = this.contract.interface.parseTransaction({
                 data: txInput,
             })
+            const params = abi?.args
             return {
                 ok: true,
                 data: {
                     method: abi!.name,
-                    params: abi!.args.toArray(),
+                    params:
+                        params instanceof EthersResult
+                            ? params.toArray()
+                            : params,
                 },
             }
         } catch (error) {

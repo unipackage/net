@@ -27,7 +27,6 @@ import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Result } from "@unipackage/utils"
 import type { Contract } from "web3-eth-contract"
 import {
-    EvmDecodeOutPut,
     EvmInput,
     EvmOutput,
     EvmTransactionOptions,
@@ -240,7 +239,7 @@ export class Web3Evm implements IEVM {
      * @param txInput - The transaction input.
      * @returns A promise resolving to EvmOutput object with the decoded transaction input.
      */
-    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut> {
+    decodeTxInputToEvmInput(txInput: string): EvmOutput<EvmInput> {
         if (!this.web3Object) {
             return {
                 ok: false,

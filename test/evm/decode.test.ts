@@ -48,17 +48,18 @@ describe("Encoding and decoding test", () => {
     //@ts-ignore
     describe("decodeTxInput Test", () => {
         it("web3 correct test", () => {
-            const web3Decode = web3Datasets.decodeTxInput(txInput)
+            const web3Decode = web3Datasets.decodeTxInputToEvmInput(txInput)
             assert.deepStrictEqual(web3Decode, evmInput)
         })
 
         it("ethers correct test", () => {
-            const ethersDecode = ethersDatasets.decodeTxInput(txInput)
+            const ethersDecode = ethersDatasets.decodeTxInputToEvmInput(txInput)
             assert.deepStrictEqual(ethersDecode, evmInput)
         })
 
         it("web3 error test", () => {
-            const web3Decode = web3Datasets.decodeTxInput(incorrectTxInput)
+            const web3Decode =
+                web3Datasets.decodeTxInputToEvmInput(incorrectTxInput)
 
             const expected = {
                 ok: false,
@@ -69,7 +70,8 @@ describe("Encoding and decoding test", () => {
         })
 
         it("ethers error test", () => {
-            const decode = ethersDatasets.decodeTxInput(incorrectTxInput)
+            const decode =
+                ethersDatasets.decodeTxInputToEvmInput(incorrectTxInput)
             assert.deepStrictEqual(decode.ok, false)
         })
     })

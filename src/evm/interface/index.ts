@@ -27,14 +27,6 @@ export const defaultTransactionOptions: EvmTransactionOptions = {
     confirmations: 0,
 }
 
-/**
- * Represents the output of decoding EVM input.
- */
-export interface EvmDecodeOutPut {
-    method: string
-    params?: any
-}
-
 export enum EvmType {
     Web3,
     Ethers,
@@ -90,7 +82,7 @@ export interface IEVM {
      * @param txInput - The transaction input data.
      * @returns A promise that resolves to the decoded output.
      */
-    decodeTxInput(txInput: string): EvmOutput<EvmDecodeOutPut>
+    decodeTxInputToEvmInput(txInput: string): EvmOutput<EvmInput>
 
     /**
      * Encode EVM input to transaction input data.

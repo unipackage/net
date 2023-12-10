@@ -36,7 +36,6 @@ export {
     EvmType,
     EvmInput,
     EvmOutput,
-    EvmDecodeOutPut,
     EvmTransactionOptions,
     IEVM,
     isEvmTransactionOptions,
