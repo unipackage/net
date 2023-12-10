@@ -18,7 +18,7 @@ import assert from "assert"
 import { it } from "mocha"
 import { Context } from "mocha"
 import { web3Proof, ethersProof } from "./env/proof"
-import { proofSubmitter, proofSubmitterKey } from "./env/constant"
+import { proofSubmitter } from "./env/constant"
 import Web3 from "web3"
 
 describe("SendValue test(By privateKey) ", () => {
@@ -27,7 +27,7 @@ describe("SendValue test(By privateKey) ", () => {
 
         const web3Result = await web3Proof.appendDatasetCollateral(1, {
             from: proofSubmitter,
-            privateKey: proofSubmitterKey,
+            privateKey: process.env.PROOFSUBMITTERKEY,
             value: web3Proof.generateWei("1", "gwei"),
         })
         const web3Tx = await (web3Proof.getWeb3() as Web3).eth.getTransaction(
@@ -42,7 +42,7 @@ describe("SendValue test(By privateKey) ", () => {
 
         const ethersResult = await ethersProof.appendDatasetCollateral(1, {
             from: proofSubmitter,
-            privateKey: proofSubmitterKey,
+            privateKey: process.env.PROOFSUBMITTERKEY,
             value: ethersProof.generateWei("1", "gwei"),
         })
         assert.deepStrictEqual(ethersResult.ok, true)

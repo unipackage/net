@@ -11,6 +11,9 @@ jobs:
         strategy:
             matrix:
                 node-version: [18.x]
+        env:
+            METADATASUBMITTERKEY: ${{ secrets.METADATASUBMITTERKEY }}
+            PROOFSUBMITTERKEY: ${{ secrets.PROOFSUBMITTERKEY }}
         steps:
             - uses: actions/checkout@v3
             - name: Use Node.js ${{ matrix.node-version }}
