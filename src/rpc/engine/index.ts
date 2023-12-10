@@ -16,14 +16,26 @@
 
 import { IRPC, RPCRequest, RPCResponse, RPCOptions } from "../interface"
 
+/**
+ * Abstract class providing the blueprint for an RPC Engine.
+ */
 export abstract class RPCEngine implements IRPC {
-    //future some common method add here
+    /**
+     * Abstract method to be implemented by derived classes for handling RPC requests.
+     *
+     * @param request - The RPC request object.
+     * @param options - Configuration options for the request.
+     * @returns A promise resolving to an RPCResponse.
+     */
     abstract request<T>(
         request: RPCRequest,
         options?: RPCOptions
     ): Promise<RPCResponse<T>>
 }
 
+/**
+ * Default RPC configuration options.
+ */
 export const DefaultOptions: RPCOptions = {
     retryRules: {
         retries: 3,

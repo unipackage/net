@@ -22,12 +22,25 @@ export class FilecoinRPCEngine extends RPCEngine {
     private engine: LotusRpcEngine
     private defaultOptions: RPCOptions
 
+    /**
+     * Constructs a FilecoinRPCEngine instance.
+     *
+     * @param config - Configuration for the LotusRpcEngine.
+     * @param defaultOptions - Default RPCOptions.
+     */
     constructor(config: LotusRpcEngineConfig, defaultOptions?: RPCOptions) {
         super()
         this.engine = new LotusRpcEngine(config)
         this.defaultOptions = defaultOptions ? defaultOptions : DefaultOptions
     }
 
+    /**
+     * Sends an RPC request using the configured LotusRpcEngine with optional options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Optional configuration options for the request.
+     * @returns A promise resolving to an RPCResponse.
+     */
     public async request(
         request: RPCRequest,
         options: RPCOptions = {}
@@ -36,6 +49,13 @@ export class FilecoinRPCEngine extends RPCEngine {
         return await this.retryRequest(request, options)
     }
 
+    /**
+     * Sends an RPC request using the configured LotusRpcEngine with optional options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Optional configuration options for the request.
+     * @returns A promise resolving to an RPCResponse.
+     */
     private async engineRequest(
         request: RPCRequest,
         options?: RPCOptions
@@ -65,6 +85,13 @@ export class FilecoinRPCEngine extends RPCEngine {
         return result
     }
 
+    /**
+     * Handles retry logic for an RPC request based on the provided options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Configuration options for the request and retries.
+     * @returns A promise resolving to an RPCResponse.
+     */
     private async retryRequest(
         request: RPCRequest,
         options?: RPCOptions
