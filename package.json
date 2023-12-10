@@ -37,6 +37,7 @@
     "@babel/runtime": "^7.23.4",
     "@release-it/conventional-changelog": "^8.0.1",
     "@types/chai": "^4.3.11",
+    "@types/dotenv": "^8.2.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "20.6.2",
     "chai": "^4.3.10",
