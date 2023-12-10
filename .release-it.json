@@ -9,7 +9,7 @@
     "publish": true
   },
   "hooks": {
-    "after:bump": "echo: update verion successful!"
+    "after:bump": "echo update verion successful!"
   },
   "plugins": {
     "@release-it/conventional-changelog": {
