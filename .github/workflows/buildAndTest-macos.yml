@@ -2,9 +2,9 @@ name: build and test
 on:
     workflow_dispatch:
     push:
-        branches: ["main", "dev"]
+        branches: ["main", "release", "dev"]
     pull_request:
-        branches: ["main"]
+        branches: ["main", "release", "dev"]
 jobs:
     buildAndTest:
         runs-on: macos-latest
