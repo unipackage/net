@@ -23,6 +23,15 @@
         "infra",
         "maintenance"
       ]
+    },
+    {
+      "login": "siriusyim",
+      "name": "sirius.yim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/85144843?v=4",
+      "profile": "https://github.com/siriusyim",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
