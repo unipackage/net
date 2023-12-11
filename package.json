@@ -9,7 +9,7 @@
     "test": "mocha  test/**/*.test.ts",
     "readme": "npx readme-md-generator -p ./templates/readme.md",
     "commit": "git-cz",
-    "release": "release-it",
+    "release": "git branch --show-current | grep -q '^release$' && release-it",
     "contrib:init": "all-contributors init",
     "contrib:add": "all-contributors add",
     "contrib:check": "all-contributors check",
