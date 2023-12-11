@@ -2,9 +2,9 @@ name: build and test
 on:
     workflow_dispatch:
     push:
-        branches: ["main", "dev"]
+        branches: ["main"]
     pull_request:
-        branches: ["main", "dev"]
+        branches: ["main"]
 jobs:
     buildAndTest:
         runs-on: macos-latest
@@ -12,8 +12,8 @@ jobs:
             matrix:
                 node-version: [18.x]
         env:
-            METADATASUBMITTERKEY: ${{ vars.METADATASUBMITTERKEY }}
-            PROOFSUBMITTERKEY: ${{ vars.PROOFSUBMITTERKEY }}
+            METADATASUBMITTERKEY: ${{ secrets.METADATASUBMITTERKEY }}
+            PROOFSUBMITTERKEY: ${{ secrets.PROOFSUBMITTERKEY }}
             PROVIDER_URL: ${{ vars.PROVIDER_URL }}
             DATASET_CONTRACT_ADDRESS: ${{ vars.DATASET_CONTRACT_ADDRESS }}
             METADATA_SUBMITTER: ${{ vars.METADATA_SUBMITTER }}
