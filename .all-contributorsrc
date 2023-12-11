@@ -1,0 +1,30 @@
+{
+  "projectName": "net",
+  "projectOwner": "unipackage",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "CONTRIBUTING.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "waynewyang",
+      "name": "waynewyang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25957795?v=4",
+      "profile": "https://github.com/waynewyang",
+      "contributions": [
+        "code",
+        "design",
+        "doc",
+        "ideas",
+        "infra",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": false
+}
