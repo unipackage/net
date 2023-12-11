@@ -10,7 +10,7 @@
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
   <a href="https://github.com/unipackage/net/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+    <img alt="License: MIT and APACHE" src="https://img.shields.io/badge/License-MIT and APACHE-yellow.svg" />
   </a>
 </p>
 
@@ -37,7 +37,9 @@ npm run test
 
 ## Author
 
-* GitHub: [@unipackage](https://github.com/unipackage)
+👤 **unipackage**
+
+* GitHub: [@unipackage](https://github.com/unipackage):[@waynewyang](https://github.com/waynewyang)
 
 ## 🤝 Contributing
 
@@ -49,4 +51,5 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-This project is [MIT](https://github.com/unipackage/net/blob/master/LICENSE) licensed.
+Copyright © 2023 [unipackage](https://github.com/unipackage).<br />
+This project is [MIT and APACHE](https://github.com/unipackage/net/blob/master/LICENSE) licensed.
