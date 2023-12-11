@@ -7,9 +7,13 @@
   "scripts": {
     "build": "rm -rf ./dist;npx tsc",
     "test": "mocha  test/**/*.test.ts",
-    "readme": "npx readme-md-generator",
+    "readme": "npx readme-md-generator -p ./templates/readme.md",
     "commit": "git-cz",
-    "release": "release-it"
+    "release": "release-it",
+    "contrib:init": "all-contributors init",
+    "contrib:add": "all-contributors add",
+    "contrib:check": "all-contributors check",
+    "contrib:gen":"all-contributors generate"
   },
   "repository": {
     "type": "git",
@@ -41,6 +45,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "20.6.2",
+    "all-contributors-cli": "^6.26.1",
     "chai": "^4.3.10",
     "git-cz": "^4.9.0",
     "mocha": "^10.2.0",

@@ -1,26 +1,55 @@
+# Contributing
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-## Contributors ✨
+👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+Please note we have a [code of conduct](https://github.com/unipackage/net/blob/master/.github/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/waynewyang"><img src="https://avatars.githubusercontent.com/u/25957795?v=4?s=100" width="100px;" alt="waynewyang"/><br /><sub><b>waynewyang</b></sub></a><br /><a href="https://github.com/unipackage/net/commits?author=waynewyang" title="Code">💻</a> <a href="#design-waynewyang" title="Design">🎨</a> <a href="https://github.com/unipackage/net/commits?author=waynewyang" title="Documentation">📖</a> <a href="#ideas-waynewyang" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-waynewyang" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-waynewyang" title="Maintenance">🚧</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/siriusyim"><img src="https://avatars.githubusercontent.com/u/85144843?v=4?s=100" width="100px;" alt="sirius.yim"/><br /><sub><b>sirius.yim</b></sub></a><br /><a href="https://github.com/unipackage/net/commits?author=siriusyim" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
+## Table of Contents
 
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
+- [Contributing](#contributing)
+  - [Table of Contents](#table-of-contents)
+  - [Setting Up the project locally](#setting-up-the-project-locally)
+  - [Git Commit](#git-commit)
+  - [Submitting a Pull Request](#submitting-a-pull-request)
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+## Setting Up the project locally
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+To install the project you need to have `node` and `npm`
+
+1.  [Fork](https://help.github.com/articles/fork-a-repo/) the project, clone
+    your fork:
+
+    ```sh
+    # Clone your fork
+    git clone https://github.com/<your-username>/net.git
+
+    # Navigate to the newly cloned directory
+    cd net 
+    ```
+
+2.  Your environment needs to be running `node` version >= 18.17.0 and `npm` version >= 10.2.0.
+
+3.  from the root of the project: `npm` to install all dependencies
+
+    - make sure you have latest `npm` version
+
+4.  from the root of the project: `npm run build` to build.
+
+5.  Your local test environment need to be setted refer to  [.evn.example](https://github.com/unipackage/net/blob/master/.env.example),
+    - copy [.evn.example](https://github.com/unipackage/net/blob/master/.env.example) to .env in root directory.
+    - modify the environment meet to your own test evnironment.
+
+## Git Commit
+Pleas use `npm run commit`
+
+## Submitting a Pull Request
+
+Please go through existing issues and pull requests to check if somebody else is already working on it.
+
+Also, make sure to run the tests and lint the code before you commit your
+changes.
+
+```sh
+npm run test
+```
