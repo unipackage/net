@@ -1,6 +1,6 @@
 {
   "name": "@unipackage/net",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "net",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
     "contrib:init": "all-contributors init",
     "contrib:add": "all-contributors add",
     "contrib:check": "all-contributors check",
-    "contrib:gen":"all-contributors generate"
+    "contrib:gen": "all-contributors generate"
   },
   "repository": {
     "type": "git",
