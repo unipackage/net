@@ -1,5 +1,5 @@
 { 
-    "loader" :  "ts-node/esm",
+    "loader" : "ts-node/esm",
     "spec": "test/**/*.test.ts",
     "exclude": ["node_modules"]
 }
