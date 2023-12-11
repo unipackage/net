@@ -1,5 +1,12 @@
 
 
+## [1.0.7](https://github.com/unipackage/net/compare/v1.0.5...v1.0.7) (2023-12-11)
+
+
+### Bug Fixes
+
+* 🐛 version no ([108dccb](https://github.com/unipackage/net/commit/108dccbf72822b73522595105a1158311a83b038))
+
 ## [1.0.5](https://github.com/unipackage/net/compare/v1.0.4...v1.0.5) (2023-12-11)
 
 ## [1.0.4](https://github.com/unipackage/net/compare/v1.0.3...v1.0.4) (2023-12-11)
