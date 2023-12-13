@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "module": "CommonJS",
     "moduleResolution": "node",
+    "declarationMap": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "isolatedModules": false,
