@@ -35,6 +35,7 @@ import {
     EvmOutput,
     EvmTransactionOptions,
     EvmType,
+    IEVMEngine,
 } from "../../interface"
 import { IEVM, defaultTransactionOptions } from "../../interface"
 import {
@@ -55,7 +56,7 @@ declare global {
 /**
  * Class representing a Web3Evm instance.
  */
-export class Web3Evm implements IEVM {
+export class Web3EvmEngine implements IEVMEngine {
     private web3Object: Web3 | null = null
     private contractObject: Contract<AbiFunctionFragment[]> | undefined
     private contractAddress: string

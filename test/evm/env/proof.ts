@@ -19,55 +19,46 @@
  ********************************************************************************/
 
 import DatasetProofAbi from "../testAbi/DatasetsProof.json"
-import { Web3Evm } from "../../../src/evm/implements/web3"
-import { EthersEvm } from "../../../src/evm/implements/ether"
+import { Evm } from "../../../src/evm/"
+import { Web3EvmEngine } from "../../../src/evm/engine/web3"
+import { EthersEvmEngine } from "../../../src/evm/engine/ether"
 import { EvmOutput } from "../../../src/evm/interface"
 import { withSendMethod } from "../../../src/evm/withMethod"
 import * as dotenv from "dotenv"
 dotenv.config()
 
 /**
- * Interface for Web3Proof containing specific methods.
+ * Interface for ProofEvm containing specific methods.
  */
-interface Web3Proof {
+interface ProofEvm {
     appendDatasetCollateral(...params: any[]): Promise<EvmOutput<any>>
 }
 
 //@ts-ignore
 @withSendMethod(["appendDatasetCollateral"])
 /**
- * Decorated class for Web3Evm implementation of Proof.
+ * Decorated class for ProofEvm implementation of Proof.
  */
-class Web3Proof extends Web3Evm {}
+class ProofEvm extends Evm {}
 
 /**
  * Instance of Web3Proof initialized with provided configuration.
  */
-export const web3Proof = new Web3Proof(
-    DatasetProofAbi.abi,
-    process.env.PROOF_CONTRACT_ADDRESS as string,
-    process.env.PROVIDER_URL as string
+export const web3Proof = new ProofEvm(
+    new Web3EvmEngine(
+        DatasetProofAbi.abi,
+        process.env.PROOF_CONTRACT_ADDRESS as string,
+        process.env.PROVIDER_URL as string
+    )
 )
-
-/**
- * Interface for EthersProof containing specific methods.
- */
-interface EthersProof {
-    appendDatasetCollateral(...params: any[]): Promise<EvmOutput<any>>
-}
-
-//@ts-ignore
-@withSendMethod(["appendDatasetCollateral"])
-/**
- * Decorated class for EthersEvm implementation of Proof.
- */
-class EthersProof extends EthersEvm {}
 
 /**
  * Instance of EthersProof initialized with provided configuration.
  */
-export const ethersProof = new EthersProof(
-    DatasetProofAbi.abi,
-    process.env.PROOF_CONTRACT_ADDRESS as string,
-    process.env.PROVIDER_URL as string
+export const ethersProof = new ProofEvm(
+    new EthersEvmEngine(
+        DatasetProofAbi.abi,
+        process.env.PROOF_CONTRACT_ADDRESS as string,
+        process.env.PROVIDER_URL as string
+    )
 )

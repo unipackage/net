@@ -70,9 +70,9 @@ export interface EvmTransactionOptions {
 }
 
 /**
- * Represents the Ethereum Virtual Machine (EVM) interface.
+ * Represents the Ethereum Virtual Machine (EVM) Engine interface.
  */
-export interface IEVM {
+export interface IEVMEngine {
     /**
      * Call a function on the EVM contract.
      *
@@ -204,6 +204,15 @@ export interface IEVM {
         input: EvmInput,
         options: EvmTransactionOptions
     ): Promise<EvmOutput<Web3Signature | string>>
+}
+
+/**
+ * Represents the Ethereum Virtual Machine (EVM) interface.
+ */
+export interface IEVM extends IEVMEngine {
+    /*
+       Add common method
+    */
 }
 
 /**

@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf ./dist;npx tsc",
-    "test": "mocha  test/**/*.test.ts",
+    "build:test": "rm -rf ./dist-test;tsc -p tsconfig.test.json;",
+    "test": "npm run build:test; mocha ",
     "readme": "npx readme-md-generator -p ./templates/readme.md",
     "commit": "git-cz",
     "release": "npm run build; git branch --show-current | grep -q '^main$' && release-it",

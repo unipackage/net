@@ -19,15 +19,15 @@
  ********************************************************************************/
 
 import {
-    IRPC,
     RPCRequest,
     RPCResponse,
     RPCOptions,
     DefaultOptions,
+    IRPCEngine,
 } from "../../interface"
 import LotusRpcEngine, { LotusRpcEngineConfig } from "@glif/filecoin-rpc-client"
 
-export class FilecoinRPC implements IRPC {
+export class FilecoinRPCEngine implements IRPCEngine {
     private engine: LotusRpcEngine
     private defaultOptions: RPCOptions
 

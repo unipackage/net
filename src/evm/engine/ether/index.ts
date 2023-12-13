@@ -36,7 +36,7 @@ import {
     EvmOutput,
     EvmTransactionOptions,
     EvmType,
-    IEVM,
+    IEVMEngine,
     defaultTransactionOptions,
 } from "../../interface"
 
@@ -52,7 +52,7 @@ declare global {
 /**
  * Class representing a EthersEvm instance.
  */
-export class EthersEvm implements IEVM {
+export class EthersEvmEngine implements IEVMEngine {
     private provider: ethers.JsonRpcProvider | ethers.BrowserProvider | null =
         null
     private contract: Contract | null = null

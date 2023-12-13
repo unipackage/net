@@ -7,7 +7,7 @@ on:
         branches: ["main"]
 jobs:
     buildAndTest:
-        runs-on: macos-latest
+        runs-on: ubuntu-latest
         strategy:
             matrix:
                 node-version: [18.x]
@@ -21,7 +21,6 @@ jobs:
             PROOF_SUBMITTER: ${{ vars.PROOF_SUBMITTER }}
             LOTUS_API_ENDPOINT: ${{ vars.LOTUS_API_ENDPOINT }}
         steps:
-            - uses: actions/checkout@v3
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v3
               with:
@@ -29,12 +28,15 @@ jobs:
 
             - name: Checkout repository
               uses: actions/checkout@v2
+
             - name: Install dependencies
               run: |
                   npm install
+
             - name: Build
               run: |
                   npm run build
+
             - name: Test
               run: |
                   npm run test

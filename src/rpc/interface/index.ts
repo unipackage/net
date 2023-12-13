@@ -93,7 +93,7 @@ export function isRPCOptions(obj: any): obj is RPCOptions {
  * Interface representing an RPC (Remote Procedure Call).
  * It defines a method for making RPC requests.
  */
-export interface IRPC {
+export interface IRPCEngine {
     /**
      * Sends an RPC request with optional configuration options.
      *
@@ -105,4 +105,14 @@ export interface IRPC {
         request: RPCRequest,
         options?: RPCOptions
     ): Promise<RPCResponse<any>>
+}
+
+/**
+ * Interface representing an RPC (Remote Procedure Call).
+ * It defines a method for making RPC requests.
+ */
+export interface IRPC extends IRPCEngine {
+    /*
+        add common method
+     */
 }

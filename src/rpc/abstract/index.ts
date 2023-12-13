@@ -18,32 +18,29 @@
  *  limitations under the respective licenses.
  ********************************************************************************/
 
-import { RPCResponse } from "../../../../src/rpc/interface"
-import { FilecoinRPCEngine } from "../../../../src/rpc/engine/filecoin"
-import { Rpc } from "../../../../src/rpc/"
-import { withRequestMethod } from "../../../../src/rpc/withMethod"
-import * as dotenv from "dotenv"
-dotenv.config()
+import { RPCRequest, RPCResponse, RPCOptions, IRPCEngine } from "../interface"
 
 /**
- * Represents the methods associated with the ChainRPC.
+ * AbstractRpc class.
  */
-interface ChainRPC {
-    ChainHead(): Promise<RPCResponse<any>>
-    ChainGetTipSetByHeight(...params: any[]): Promise<RPCResponse<any>>
+export class AbstractRpc {
+    private engine: IRPCEngine
+
+    constructor(engine: IRPCEngine) {
+        this.engine = engine
+    }
+
+    /**
+     * Sends an RPC request with optional configuration options.
+     *
+     * @param request - The RPC request object.
+     * @param options - Optional configuration options for the request.
+     * @returns A promise resolving to an RPCResponse.
+     */
+    async request(
+        request: RPCRequest,
+        options?: RPCOptions
+    ): Promise<RPCResponse<any>> {
+        return await this.engine.request(request, options)
+    }
 }
-
-// Decorate the ChainRPC class with dynamically generated methods
-//@ts-ignore
-@withRequestMethod(["ChainHead", "ChainGetTipSetByHeight"])
-class ChainRPC extends Rpc {}
-
-/**
- * ChainRPC instance to interact with the Filecoin chain.
- */
-export const chainRPC = new ChainRPC(
-    new FilecoinRPCEngine({
-        apiAddress: process.env.LOTUS_API_ENDPOINT as string,
-        token: process.env.LOTUS_TOKEN,
-    })
-)

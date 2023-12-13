@@ -19,17 +19,18 @@
  ********************************************************************************/
 
 import DatasetsAbi from "../testAbi/Datasets.json"
-import { Web3Evm } from "../../../src/evm/implements/web3"
-import { EthersEvm } from "../../../src/evm/implements/ether"
+import { Evm } from "../../../src/evm/"
+import { Web3EvmEngine } from "../../../src/evm/engine/web3"
+import { EthersEvmEngine } from "../../../src/evm/engine/ether"
 import { EvmOutput } from "../../../src/evm/interface"
 import { withCallMethod, withSendMethod } from "../../../src/evm/withMethod"
 import * as dotenv from "dotenv"
 dotenv.config()
 
 /**
- * Interface for Web3Datasets containing specific methods.
+ * Interface for DatasetsEvm containing specific methods.
  */
-interface Web3Datasets {
+interface DatasetsEvm {
     getDatasetMetadata(id: number): Promise<EvmOutput<any>>
     getDatasetMetadataSubmitter(id: number): Promise<EvmOutput<string>>
     submitDatasetMetadata(...params: any[]): Promise<EvmOutput<any>>
@@ -40,42 +41,28 @@ interface Web3Datasets {
 //@ts-ignore
 @withSendMethod(["submitDatasetMetadata"])
 /**
- * Decorated class for Web3Evm implementation of Datasets.
+ * Decorated class for DatasetsEvm implementation of Datasets.
  */
-class Web3Datasets extends Web3Evm {}
+class DatasetsEvm extends Evm {}
 
 /**
  * Instance of Web3Datasets initialized with provided configuration.
  */
-export const web3Datasets = new Web3Datasets(
-    DatasetsAbi.abi,
-    process.env.DATASET_CONTRACT_ADDRESS as string,
-    process.env.PROVIDER_URL as string
+export const web3Datasets = new DatasetsEvm(
+    new Web3EvmEngine(
+        DatasetsAbi.abi,
+        process.env.DATASET_CONTRACT_ADDRESS as string,
+        process.env.PROVIDER_URL as string
+    )
 )
-
-/**
- * Interface for EthersDatasets containing specific methods.
- */
-interface EthersDatasets {
-    getDatasetMetadata(id: number): Promise<EvmOutput<any>>
-    getDatasetMetadataSubmitter(id: number): Promise<EvmOutput<string>>
-    submitDatasetMetadata(...params: any[]): Promise<EvmOutput<any>>
-}
-
-//@ts-ignore
-@withCallMethod(["getDatasetMetadata", "getDatasetMetadataSubmitter"])
-//@ts-ignore
-@withSendMethod(["submitDatasetMetadata"])
-/**
- * Decorated class for EthersEvm implementation of Datasets.
- */
-class EthersDatasets extends EthersEvm {}
 
 /**
  * Instance of EthersDatasets initialized with provided configuration.
  */
-export const ethersDatasets = new EthersDatasets(
-    DatasetsAbi.abi,
-    process.env.DATASET_CONTRACT_ADDRESS as string,
-    process.env.PROVIDER_URL as string
+export const ethersDatasets = new DatasetsEvm(
+    new EthersEvmEngine(
+        DatasetsAbi.abi,
+        process.env.DATASET_CONTRACT_ADDRESS as string,
+        process.env.PROVIDER_URL as string
+    )
 )

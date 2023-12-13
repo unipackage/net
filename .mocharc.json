@@ -1,5 +1,6 @@
 { 
     "loader" : "ts-node/esm",
-    "spec": "test/**/*.test.ts",
-    "exclude": ["node_modules"]
+    "spec": "dist-test/**/*.test.js",
+    "exclude": ["node_modules"],
+    "project": "./tsconfig.test.json"
 }

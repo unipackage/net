@@ -20,6 +20,7 @@
 
 export {
     IRPC,
+    IRPCEngine,
     RPCEngineConfig,
     RPCOptions,
     RPCRequest,
@@ -29,8 +30,10 @@ export {
     isRPCOptions,
     DefaultOptions,
 } from "./rpc/interface"
-export { FilecoinRPC } from "./rpc/implements/filecoin"
+export { FilecoinRPCEngine } from "./rpc/engine/filecoin"
 export { withRequestMethod } from "./rpc/withMethod"
+export { Rpc } from "./rpc/"
+export { AbstractRpc } from "./rpc/abstract"
 
 export { withMethods } from "./shared/withMethods"
 export { InputParams } from "./shared/types/params"
@@ -41,13 +44,16 @@ export {
     EvmInput,
     EvmOutput,
     EvmTransactionOptions,
+    IEVMEngine,
     IEVM,
     isEvmTransactionOptions,
 } from "./evm/interface"
-export { Web3Evm } from "./evm/implements/web3"
-export { EthersEvm } from "./evm/implements/ether"
+export { Web3EvmEngine } from "./evm/engine/web3"
+export { EthersEvmEngine } from "./evm/engine/ether"
 export {
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
-} from "./evm/implements/web3/tools"
+} from "./evm/engine/web3/tools"
 export { withCallMethod, withSendMethod } from "./evm/withMethod"
+export { Evm } from "./evm/"
+export { AbstractEvm } from "./evm/abstract"
