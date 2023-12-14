@@ -1,5 +1,17 @@
 
 
+# [1.1.0](https://github.com/unipackage/net/compare/v1.0.7...v1.1.0) (2023-12-14)
+
+
+### Bug Fixes
+
+* 🐛 update tsconfig for mapping ([5e63200](https://github.com/unipackage/net/commit/5e63200299e884b32c76c3f212fec964d58123dd))
+
+
+### Features
+
+* 🎸 split I into I and IEngine and update test ([801f4ff](https://github.com/unipackage/net/commit/801f4ff60556a56a2a4b70378e1e4990efefaf90))
+
 ## [1.0.7](https://github.com/unipackage/net/compare/v1.0.5...v1.0.7) (2023-12-11)
 
 
