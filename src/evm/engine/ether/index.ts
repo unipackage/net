@@ -439,6 +439,7 @@ export class EthersEvmEngine implements IEVMEngine {
 
         try {
             const result = await this.provider.broadcastTransaction(signed)
+            await this.provider.waitForTransaction(result.hash);
             return {
                 ok: true,
                 data: result,
