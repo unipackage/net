@@ -1,5 +1,13 @@
 
 
+## [1.1.1](https://github.com/unipackage/net/compare/v1.1.0...v1.1.1) (2023-12-15)
+
+
+### Bug Fixes
+
+* 🐛 did not wait for TransactionReceipt of ether engine ([6612738](https://github.com/unipackage/net/commit/661273888e1b4f3bc0b54ef40d5118081c7bb42c))
+* 🐛 function send of ether engine ([6d32d7e](https://github.com/unipackage/net/commit/6d32d7e550b4399e028ee03064e4afdea95774fa)), closes [#8](https://github.com/unipackage/net/issues/8)
+
 # [1.1.0](https://github.com/unipackage/net/compare/v1.0.7...v1.1.0) (2023-12-14)
 
 
