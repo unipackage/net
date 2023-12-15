@@ -50,7 +50,10 @@ describe("SendValue test(By privateKey) ", () => {
             privateKey: process.env.PROOFSUBMITTERKEY,
             value: ethersProof.generateWei("1", "gwei"),
         })
+        const ethersTx = await ethersProof.getEtherProvider()?.getTransaction(
+            ethersResult.data.hash
+        )
         assert.deepStrictEqual(ethersResult.ok, true)
-        assert.deepStrictEqual(ethersResult.data.value, BigInt(1000000000))
+        assert.deepStrictEqual(ethersTx?.value, BigInt(1000000000))
     })
 })

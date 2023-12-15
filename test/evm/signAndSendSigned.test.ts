@@ -57,7 +57,10 @@ describe("Sign and sendSigned test(By privateKey) ", () => {
             }
         )
         const result = await ethersProof.sendSigned(signed.data!)
+        const tx = await ethersProof.getEtherProvider()?.getTransaction(
+            result.data.hash
+        )
         assert.deepStrictEqual(result.ok, true)
-        assert.deepStrictEqual(result.data.value, BigInt(1000000000))
+        assert.deepStrictEqual(tx?.value, BigInt(1000000000))
     })
 })
