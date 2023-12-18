@@ -1,5 +1,13 @@
 
 
+# [2.1.0](https://github.com/unipackage/net/compare/v2.0.0...v2.1.0) (2023-12-18)
+
+
+### Features
+
+* 🎸 add getEvmEventArgs,getTransaction,getTransactionReceip ([709eb2a](https://github.com/unipackage/net/commit/709eb2ac0623138d31df4e6286292b3ce36274dc))
+* 🎸 getEvmEventArgs return object insteads of array ([43090c4](https://github.com/unipackage/net/commit/43090c4f362070a66bec15107349486ffc249f2c))
+
 # [2.0.0](https://github.com/unipackage/net/compare/v1.1.1...v2.0.0) (2023-12-18)
 
 
