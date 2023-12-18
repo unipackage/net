@@ -19,7 +19,7 @@
  ********************************************************************************/
 
 import { isRPCOptions } from "../interface"
-import { withMethods } from "../../shared/withMethods"
+import { withMethods } from "@unipackage/utils"
 
 /**
  * Decorator function to dynamically add methods to a class prototype.

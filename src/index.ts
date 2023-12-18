@@ -35,7 +35,6 @@ export { withRequestMethod } from "./rpc/withMethod"
 export { Rpc } from "./rpc/"
 export { AbstractRpc } from "./rpc/abstract"
 
-export { withMethods } from "./shared/withMethods"
 export { InputParams } from "./shared/types/params"
 
 export {

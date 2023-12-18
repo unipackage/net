@@ -35,7 +35,7 @@
   "dependencies": {
     "@dataswapcore/abi": "^0.1.2",
     "@glif/filecoin-rpc-client": "^2.0.43",
-    "@unipackage/utils": "^1.1.1",
+    "@unipackage/utils": "^1.4.0",
     "ethers": "^6.8.1",
     "web3": "^4.0.3"
   },

@@ -19,7 +19,7 @@
  ********************************************************************************/
 
 import { isEvmTransactionOptions } from "../interface"
-import { withMethods } from "../../shared/withMethods"
+import { withMethods } from "@unipackage/utils"
 
 /**
  * withSendMethod:Decorator function to dynamically add methods to a class prototype.
