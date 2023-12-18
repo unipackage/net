@@ -453,6 +453,13 @@ export class Web3EvmEngine implements IEVMEngine {
         return this.contractABI
     }
 
+    /**
+     * Extracts Ethereum Virtual Machine (EVM) event arguments from a transaction receipt.
+     *
+     * @param transactionReceipt - The transaction receipt containing event data.
+     * @param name - The name of the event.
+     * @returns An object representing the extracted EVM event arguments.
+     */
     getEvmEventArgs(
         transactionReceipt: TransactionReceipt,
         name: string

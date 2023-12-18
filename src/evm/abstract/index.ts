@@ -115,6 +115,13 @@ export abstract class AbstractEvm implements IEVM {
         return this.engine.getContractABI()
     }
 
+    /**
+     * Extracts Ethereum Virtual Machine (EVM) event arguments from a transaction receipt.
+     *
+     * @param transactionReceipt - The transaction receipt containing event data.
+     * @param name - The name of the event.
+     * @returns An object representing the extracted EVM event arguments.
+     */
     getEvmEventArgs(
         transactionReceipt: TransactionReceipt,
         name: string
@@ -198,8 +205,20 @@ export abstract class AbstractEvm implements IEVM {
         return await this.engine.sign(input, options)
     }
 
+    /**
+     * Retrieves transaction details for a given transaction hash.
+     *
+     * @param hash - The transaction hash.
+     * @returns A Promise resolving to the transaction details or `null` if not found.
+     */
     abstract getTransaction(hash: string): Promise<TransactionResponse | null>
 
+    /**
+     * Retrieves transaction receipt for a given transaction hash.
+     *
+     * @param hash - The transaction hash.
+     * @returns A Promise resolving to the transaction receipt or `null` if not found.
+     */
     abstract getTransactionReceipt(
         hash: string
     ): Promise<TransactionReceipt | null>

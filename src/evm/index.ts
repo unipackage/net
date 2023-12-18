@@ -13,7 +13,12 @@ export class Evm extends AbstractEvm {
     constructor(engine: IEVMEngine) {
         super(engine)
     }
-
+    /**
+     * Retrieves transaction details for a given transaction hash.
+     *
+     * @param hash - The transaction hash.
+     * @returns A Promise resolving to the transaction details or `null` if not found.
+     */
     async getTransaction(hash: string): Promise<null | TransactionResponse> {
         switch (this.getEvmType()) {
             case EvmType.Ethers:
@@ -33,6 +38,12 @@ export class Evm extends AbstractEvm {
         }
     }
 
+    /**
+     * Retrieves transaction receipt for a given transaction hash.
+     *
+     * @param hash - The transaction hash.
+     * @returns A Promise resolving to the transaction receipt or `null` if not found.
+     */
     async getTransactionReceipt(
         hash: string
     ): Promise<null | TransactionReceipt> {

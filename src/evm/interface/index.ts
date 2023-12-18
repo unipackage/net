@@ -38,23 +38,44 @@ import {
     TransactionReceipt as EthersTransactionReceipt,
 } from "ethers"
 
+/**
+ * Represents a transaction response, which can be from ethers or web3.
+ */
 export type TransactionResponse =
     | EthersTransactionResponse
     | Web3TransactionResponse
 
+/**
+ * Represents a transaction receipt, which can be from ethers or web3.
+ */
 export type TransactionReceipt =
     | EthersTransactionReceipt
     | Web3TransactionReceipt
 
+/**
+ * Represents a signature, which can be a web3 signature or a string.
+ */
 export type Signature = Web3Signature | string
 
+/**
+ * Represents a contract, which can be a web3 contract or an ethers contract.
+ */
 export type Contract = Web3Contract<AbiFunctionFragment[]> | EtherContract
 
+/**
+ * Represents an ABI fragment, which can be a function fragment or a JSON fragment.
+ */
 export type AbiFragment = AbiFunctionFragment | JsonFragment
 
+/**
+ * Represents an ABI (Array of ABI fragments).
+ */
 export type Abi = AbiFragment[]
 
-export type EvmEventArgs = any[]
+/**
+ * Represents Ethereum Virtual Machine (EVM) event arguments.
+ */
+export type EvmEventArgs = any
 
 /**
  * Default transaction options for EVM transactions.
@@ -174,6 +195,13 @@ export interface IEVMEngine {
      */
     getContractABI(): Abi
 
+    /**
+     * Extracts Ethereum Virtual Machine (EVM) event arguments from a transaction receipt.
+     *
+     * @param transactionReceipt - The transaction receipt containing event data.
+     * @param name - The name of the event.
+     * @returns An object representing the extracted EVM event arguments.
+     */
     getEvmEventArgs(
         transactionReceipt: TransactionReceipt,
         name: string
@@ -244,8 +272,20 @@ export interface IEVMEngine {
  * Represents the Ethereum Virtual Machine (EVM) interface.
  */
 export interface IEVM extends IEVMEngine {
+    /**
+     * Retrieves transaction details for a given transaction hash.
+     *
+     * @param hash - The transaction hash.
+     * @returns A Promise resolving to the transaction details or `null` if not found.
+     */
     getTransaction(hash: string): Promise<null | TransactionResponse>
 
+    /**
+     * Retrieves transaction receipt for a given transaction hash.
+     *
+     * @param hash - The transaction hash.
+     * @returns A Promise resolving to the transaction receipt or `null` if not found.
+     */
     getTransactionReceipt(hash: string): Promise<null | TransactionReceipt>
 }
 
