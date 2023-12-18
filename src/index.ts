@@ -58,8 +58,8 @@ export { Web3EvmEngine } from "./evm/engine/web3"
 export { EthersEvmEngine } from "./evm/engine/ether"
 export {
     convertArrayToObjectByAbiAndName,
-    convertArrayToObjectByAbiFunctionFragment,
-    getAbiFunctionFragmentByMethodName,
+    convertArrayToObjectByAbiFragment,
+    getAbiFragmentByMethodName,
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
 } from "./evm/engine/utils"

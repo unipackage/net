@@ -199,6 +199,7 @@ export class EthersEvmEngine implements IEVMEngine {
                     result instanceof EthersResult
                         ? convertArrayToObjectByAbiAndName(
                               this.getContractABI(),
+                              "function",
                               input.method,
                               result.toArray()
                           )
@@ -369,7 +370,13 @@ export class EthersEvmEngine implements IEVMEngine {
                         ok: true,
                         data:
                             event.args instanceof EthersResult
-                                ? event.args.toArray()
+                                ? convertArrayToObjectByAbiAndName(
+                                      this.getContractABI(),
+                                      "event",
+                                      event.name,
+                                      event.args.toArray(),
+                                      true
+                                  )
                                 : event.args,
                     }
                 }

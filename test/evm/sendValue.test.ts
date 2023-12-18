@@ -27,7 +27,10 @@ dotenv.config()
 
 const expectEventArgs = {
     ok: true,
-    data: [BigInt(1), "0x3D08114dD4F65B5DDCc760884249D9d1AE435Dee"],
+    data: {
+        datasetId: BigInt(1),
+        provider: "0x3D08114dD4F65B5DDCc760884249D9d1AE435Dee",
+    },
 }
 
 describe("Send(value),getEvmEventArgs,getTransaction,getTransactionReceipt test(By privateKey) ", () => {

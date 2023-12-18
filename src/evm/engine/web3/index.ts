@@ -42,7 +42,7 @@ import {
 import { defaultTransactionOptions } from "../../interface"
 import {
     convertArrayToObjectByAbiAndName,
-    getAbiFunctionFragmentByMethodName,
+    getAbiFragmentByMethodName,
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
     parseEvmReplyData,
@@ -242,6 +242,7 @@ export class Web3EvmEngine implements IEVMEngine {
                     result instanceof Array
                         ? convertArrayToObjectByAbiAndName(
                               this.contractABI,
+                              "function",
                               input.method,
                               result
                           )
@@ -405,7 +406,11 @@ export class Web3EvmEngine implements IEVMEngine {
                 error: "Web3 is not initialized!",
             }
         }
-        const abi = getAbiFunctionFragmentByMethodName(this.contractABI, name)
+        const abi = getAbiFragmentByMethodName(
+            this.contractABI,
+            "function",
+            name
+        )
         if (abi) {
             return this.encodeFunctionSignatureByAbi(abi as AbiFunctionFragment)
         } else {
@@ -484,9 +489,19 @@ export class Web3EvmEngine implements IEVMEngine {
                         log.data as string,
                         log.topics as string[]
                     )
+                    const originResult = parseEvmReplyData(decodedData)
                     result = {
                         ok: true,
-                        data: parseEvmReplyData(decodedData),
+                        data:
+                            originResult instanceof Array
+                                ? convertArrayToObjectByAbiAndName(
+                                      this.getContractABI(),
+                                      "event",
+                                      name,
+                                      originResult,
+                                      true
+                                  )
+                                : originResult,
                     }
                 }
             })
