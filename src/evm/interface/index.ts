@@ -21,9 +21,40 @@
 import { Result } from "@unipackage/utils"
 import { InputParams } from "../../shared/types/params"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
-import { Contract, Web3, AbiFunctionFragment, Numbers } from "web3"
+import {
+    Contract as Web3Contract,
+    Web3,
+    AbiFunctionFragment,
+    Numbers,
+    TransactionInfo as Web3TransactionResponse,
+    TransactionReceipt as Web3TransactionReceipt,
+} from "web3"
 import { EtherUnits } from "web3-utils"
-import { ethers, JsonFragment, Contract as EtherContract } from "ethers"
+import {
+    ethers,
+    JsonFragment,
+    Contract as EtherContract,
+    TransactionResponse as EthersTransactionResponse,
+    TransactionReceipt as EthersTransactionReceipt,
+} from "ethers"
+
+export type TransactionResponse =
+    | EthersTransactionResponse
+    | Web3TransactionResponse
+
+export type TransactionReceipt =
+    | EthersTransactionReceipt
+    | Web3TransactionReceipt
+
+export type Signature = Web3Signature | string
+
+export type Contract = Web3Contract<AbiFunctionFragment[]> | EtherContract
+
+export type AbiFragment = AbiFunctionFragment | JsonFragment
+
+export type Abi = AbiFragment[]
+
+export type EvmEventArgs = any[]
 
 /**
  * Default transaction options for EVM transactions.
@@ -103,9 +134,7 @@ export interface IEVMEngine {
      * @param abi - The ABI function fragment.
      * @returns The encoded function signature or an error result.
      */
-    encodeFunctionSignatureByAbi(
-        abi: AbiFunctionFragment | JsonFragment
-    ): Result<string>
+    encodeFunctionSignatureByAbi(abiFragment: AbiFragment): Result<string>
 
     /**
      * Encode function signature using the function name.
@@ -129,7 +158,7 @@ export interface IEVMEngine {
      *
      * @returns The EVM contract object or null if not initialized.
      */
-    getContract(): Contract<AbiFunctionFragment[]> | EtherContract | null
+    getContract(): Contract | null
 
     /**
      * Get the EVM contract address.
@@ -143,7 +172,12 @@ export interface IEVMEngine {
      *
      * @returns The EVM contract abi or null if not initialized.
      */
-    getContractABI(): AbiFunctionFragment[] | JsonFragment[]
+    getContractABI(): Abi
+
+    getEvmEventArgs(
+        transactionReceipt: TransactionReceipt,
+        name: string
+    ): EvmOutput<EvmEventArgs>
 
     /**
      * Get the EVM type.
@@ -183,7 +217,7 @@ export interface IEVMEngine {
     send(
         input: EvmInput,
         options: EvmTransactionOptions
-    ): Promise<EvmOutput<any>>
+    ): Promise<EvmOutput<TransactionReceipt>>
 
     /**
      * Send a signed transaction to the EVM.
@@ -191,7 +225,7 @@ export interface IEVMEngine {
      * @param signed - The signed transaction data.
      * @returns A promise that resolves to the transaction result.
      */
-    sendSigned(signed: Web3Signature | string): Promise<EvmOutput<any>>
+    sendSigned(signed: Signature): Promise<EvmOutput<TransactionReceipt>>
 
     /**
      * Sign a transaction on the EVM.
@@ -203,16 +237,16 @@ export interface IEVMEngine {
     sign(
         input: EvmInput,
         options: EvmTransactionOptions
-    ): Promise<EvmOutput<Web3Signature | string>>
+    ): Promise<EvmOutput<Signature>>
 }
 
 /**
  * Represents the Ethereum Virtual Machine (EVM) interface.
  */
 export interface IEVM extends IEVMEngine {
-    /*
-       Add common method
-    */
+    getTransaction(hash: string): Promise<null | TransactionResponse>
+
+    getTransactionReceipt(hash: string): Promise<null | TransactionReceipt>
 }
 
 /**

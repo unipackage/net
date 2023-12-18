@@ -1,6 +1,5 @@
-import { JsonFragment, Contract as EtherContract, ethers } from "ethers"
-import { Contract, Web3, AbiFunctionFragment, Numbers } from "web3"
-import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
+import { ethers } from "ethers"
+import { Web3, Numbers } from "web3"
 import { EtherUnits } from "web3-utils"
 import { Result } from "@unipackage/utils"
 import {
@@ -9,11 +8,19 @@ import {
     EvmTransactionOptions,
     EvmType,
     IEVMEngine,
+    IEVM,
+    AbiFragment,
+    Contract,
+    TransactionReceipt,
+    TransactionResponse,
+    Signature,
+    Abi,
+    EvmEventArgs,
 } from "../interface"
 /**
  * Represents the Ethereum Virtual Machine (EVM) Engine interface.
  */
-export abstract class AbstractEvm {
+export abstract class AbstractEvm implements IEVM {
     private engine: IEVMEngine
 
     constructor(engine: IEVMEngine) {
@@ -56,10 +63,8 @@ export abstract class AbstractEvm {
      * @param abi - The ABI function fragment.
      * @returns The encoded function signature or an error result.
      */
-    encodeFunctionSignatureByAbi(
-        abi: AbiFunctionFragment | JsonFragment
-    ): Result<string> {
-        return this.engine.encodeFunctionSignatureByAbi(abi)
+    encodeFunctionSignatureByAbi(abiFragment: AbiFragment): Result<string> {
+        return this.engine.encodeFunctionSignatureByAbi(abiFragment)
     }
 
     /**
@@ -88,7 +93,7 @@ export abstract class AbstractEvm {
      *
      * @returns The EVM contract object or null if not initialized.
      */
-    getContract(): Contract<AbiFunctionFragment[]> | EtherContract | null {
+    getContract(): Contract | null {
         return this.engine.getContract()
     }
 
@@ -106,8 +111,15 @@ export abstract class AbstractEvm {
      *
      * @returns The EVM contract abi or null if not initialized.
      */
-    getContractABI(): AbiFunctionFragment[] | JsonFragment[] {
+    getContractABI(): Abi {
         return this.engine.getContractABI()
+    }
+
+    getEvmEventArgs(
+        transactionReceipt: TransactionReceipt,
+        name: string
+    ): EvmOutput<EvmEventArgs> {
+        return this.engine.getEvmEventArgs(transactionReceipt, name)
     }
 
     /**
@@ -156,7 +168,7 @@ export abstract class AbstractEvm {
     async send(
         input: EvmInput,
         options: EvmTransactionOptions
-    ): Promise<EvmOutput<any>> {
+    ): Promise<EvmOutput<TransactionReceipt>> {
         return await this.engine.send(input, options)
     }
 
@@ -166,7 +178,9 @@ export abstract class AbstractEvm {
      * @param signed - The signed transaction data.
      * @returns A promise that resolves to the transaction result.
      */
-    async sendSigned(signed: Web3Signature | string): Promise<EvmOutput<any>> {
+    async sendSigned(
+        signed: Signature
+    ): Promise<EvmOutput<TransactionReceipt>> {
         return await this.engine.sendSigned(signed)
     }
 
@@ -180,7 +194,13 @@ export abstract class AbstractEvm {
     async sign(
         input: EvmInput,
         options: EvmTransactionOptions
-    ): Promise<EvmOutput<Web3Signature | string>> {
+    ): Promise<EvmOutput<Signature>> {
         return await this.engine.sign(input, options)
     }
+
+    abstract getTransaction(hash: string): Promise<TransactionResponse | null>
+
+    abstract getTransactionReceipt(
+        hash: string
+    ): Promise<TransactionReceipt | null>
 }

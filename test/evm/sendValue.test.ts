@@ -22,11 +22,15 @@ import assert from "assert"
 import { it } from "mocha"
 import { Context } from "mocha"
 import { web3Proof, ethersProof } from "./env/proof"
-import Web3 from "web3"
 import * as dotenv from "dotenv"
 dotenv.config()
 
-describe("SendValue test(By privateKey) ", () => {
+const expectEventArgs = {
+    ok: true,
+    data: [BigInt(1), "0x3D08114dD4F65B5DDCc760884249D9d1AE435Dee"],
+}
+
+describe("Send(value),getEvmEventArgs,getTransaction,getTransactionReceipt test(By privateKey) ", () => {
     it("web3 correct test", async function (this: Context) {
         this.timeout(100000)
 
@@ -35,11 +39,19 @@ describe("SendValue test(By privateKey) ", () => {
             privateKey: process.env.PROOFSUBMITTERKEY,
             value: web3Proof.generateWei("1", "gwei"),
         })
-        const web3Tx = await (web3Proof.getWeb3() as Web3).eth.getTransaction(
+        const web3Tx = await web3Proof.getTransaction(
             web3Result.data.transactionHash
         )
+        const web3Receipt = await web3Proof.getTransactionReceipt(
+            web3Result.data.transactionHash
+        )
+
         assert.deepStrictEqual(web3Result.ok, true)
-        assert.deepStrictEqual(web3Tx.value, BigInt(1000000000))
+        assert.deepStrictEqual(web3Tx?.value, BigInt(1000000000))
+        assert.deepStrictEqual(web3Result.data, web3Receipt)
+
+        const res = web3Proof.getEvmEventArgs(web3Receipt!, "CollateralEnough")
+        assert.deepStrictEqual(res, expectEventArgs)
     })
 
     it("ethers correct test", async function (this: Context) {
@@ -50,10 +62,18 @@ describe("SendValue test(By privateKey) ", () => {
             privateKey: process.env.PROOFSUBMITTERKEY,
             value: ethersProof.generateWei("1", "gwei"),
         })
-        const ethersTx = await ethersProof.getEtherProvider()?.getTransaction(
+        const ethersTx = await ethersProof.getTransaction(
             ethersResult.data.hash
         )
+        const Receipt = await ethersProof.getTransactionReceipt(
+            ethersResult.data.hash
+        )
+
         assert.deepStrictEqual(ethersResult.ok, true)
         assert.deepStrictEqual(ethersTx?.value, BigInt(1000000000))
+        assert.deepStrictEqual(ethersResult.data, Receipt)
+
+        const res = ethersProof.getEvmEventArgs(Receipt!, "CollateralEnough")
+        assert.deepStrictEqual(res, expectEventArgs)
     })
 })

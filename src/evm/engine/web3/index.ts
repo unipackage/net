@@ -25,12 +25,14 @@ import {
     AbiFunctionFragment,
     AbiInput,
     Numbers,
+    AbiParameter,
 } from "web3"
 import { EtherUnits } from "web3-utils"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { Result } from "@unipackage/utils"
 import type { Contract } from "web3-eth-contract"
 import {
+    EvmEventArgs,
     EvmInput,
     EvmOutput,
     EvmTransactionOptions,
@@ -444,6 +446,57 @@ export class Web3EvmEngine implements IEVMEngine {
      */
     getContractABI(): AbiFunctionFragment[] {
         return this.contractABI
+    }
+
+    getEvmEventArgs(
+        transactionReceipt: TransactionReceipt,
+        name: string
+    ): EvmOutput<EvmEventArgs> {
+        let result: EvmOutput<EvmEventArgs> = {
+            ok: false,
+            error: `getEvmEventArgs error:Not found Event:${name}`,
+        }
+
+        if (!this.web3Object || !this.contractObject) {
+            return {
+                ok: false,
+                error: "Web3 or contract is not initialized!",
+            }
+        }
+        const abiFragment = this.contractABI.find(
+            (entry) => entry.type === "event" && entry.name === name
+        )
+        if (!abiFragment) {
+            return {
+                ok: false,
+                error: `getEvmEventArgs: Not found ${name}'s abi fragment`,
+            }
+        }
+        const input = abiFragment.inputs as AbiParameter[]
+        const signature =
+            this.web3Object.eth.abi.encodeEventSignature(abiFragment)
+
+        try {
+            transactionReceipt.logs.forEach((log) => {
+                if (signature === (log.topics![0] as string)) {
+                    const decodedData = this.web3Object!.eth.abi.decodeLog(
+                        input,
+                        log.data as string,
+                        log.topics as string[]
+                    )
+                    result = {
+                        ok: true,
+                        data: parseEvmReplyData(decodedData),
+                    }
+                }
+            })
+        } catch (error) {
+            return {
+                ok: false,
+                error: `getEvmEventArgs error: ${error}`,
+            }
+        }
+        return result
     }
 
     /**

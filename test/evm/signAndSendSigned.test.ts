@@ -17,15 +17,15 @@
  *  See the MIT License or the Apache License for the specific language governing permissions and
  *  limitations under the respective licenses.
  ********************************************************************************/
-
 import assert from "assert"
 import { it } from "mocha"
 import { Context } from "mocha"
-import { Web3 } from "web3"
 import { SignTransactionResult as Web3Signature } from "web3-eth-accounts"
 import { web3Proof, ethersProof } from "./env/proof"
 import * as dotenv from "dotenv"
 dotenv.config()
+import { TransactionReceipt as Web3TransactionReceipt } from "web3"
+import { TransactionReceipt as EthersTransactionReceipt } from "ethers"
 
 describe("Sign and sendSigned test(By privateKey) ", () => {
     it("web3 correct test", async function (this: Context) {
@@ -39,11 +39,11 @@ describe("Sign and sendSigned test(By privateKey) ", () => {
             }
         )
         const result = await web3Proof.sendSigned(signed.data as Web3Signature)
-        const tx = await (web3Proof.getWeb3() as Web3).eth.getTransaction(
-            result.data.transactionHash
+        const tx = await web3Proof.getTransaction(
+            (result.data as Web3TransactionReceipt).transactionHash as string
         )
         assert.deepStrictEqual(result.ok, true)
-        assert.deepStrictEqual(tx.value, BigInt(1000000000))
+        assert.deepStrictEqual(tx?.value, BigInt(1000000000))
     })
 
     it("ethers correct test", async function (this: Context) {
@@ -57,8 +57,8 @@ describe("Sign and sendSigned test(By privateKey) ", () => {
             }
         )
         const result = await ethersProof.sendSigned(signed.data!)
-        const tx = await ethersProof.getEtherProvider()?.getTransaction(
-            result.data.hash
+        const tx = await ethersProof.getTransaction(
+            (result.data as EthersTransactionReceipt).hash
         )
         assert.deepStrictEqual(result.ok, true)
         assert.deepStrictEqual(tx?.value, BigInt(1000000000))

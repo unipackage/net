@@ -46,6 +46,13 @@ export {
     IEVMEngine,
     IEVM,
     isEvmTransactionOptions,
+    TransactionResponse,
+    TransactionReceipt,
+    Signature,
+    Contract,
+    AbiFragment,
+    Abi,
+    EvmEventArgs,
 } from "./evm/interface"
 export { Web3EvmEngine } from "./evm/engine/web3"
 export { EthersEvmEngine } from "./evm/engine/ether"

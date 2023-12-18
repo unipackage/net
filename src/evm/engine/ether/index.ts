@@ -28,10 +28,12 @@ import {
     assertArgument,
     Wallet,
     Result as EthersResult,
+    TransactionReceipt,
 } from "ethers"
 import { EtherUnits } from "web3-utils"
 import { Result } from "@unipackage/utils"
 import {
+    EvmEventArgs,
     EvmInput,
     EvmOutput,
     EvmTransactionOptions,
@@ -338,6 +340,47 @@ export class EthersEvmEngine implements IEVMEngine {
      */
     getContractABI(): JsonFragment[] {
         return this.contractABI as JsonFragment[]
+    }
+
+    getEvmEventArgs(
+        transactionReceipt: TransactionReceipt,
+        name: string
+    ): EvmOutput<EvmEventArgs> {
+        let result: EvmOutput<EvmEventArgs> = {
+            ok: false,
+            error: `getEvmEventArgs error:Not found Event:${name}`,
+        }
+
+        if (!this.provider || !this.contract) {
+            return {
+                ok: false,
+                error: "Ethers provider or contract is not initialized!",
+            }
+        }
+
+        try {
+            transactionReceipt.logs.forEach((log) => {
+                const event = this.contract!.interface.parseLog({
+                    topics: log.topics as string[],
+                    data: log.data,
+                })
+                if (event && event.name && event.name === name) {
+                    result = {
+                        ok: true,
+                        data:
+                            event.args instanceof EthersResult
+                                ? event.args.toArray()
+                                : event.args,
+                    }
+                }
+            })
+        } catch (error) {
+            return {
+                ok: false,
+                error: `getEvents error:${error}`,
+            }
+        }
+        return result
     }
 
     /**
