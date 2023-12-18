@@ -1,5 +1,19 @@
 
 
+# [2.0.0](https://github.com/unipackage/net/compare/v1.1.1...v2.0.0) (2023-12-18)
+
+
+### Features
+
+* 🎸 move withMethod to utils packag ([6109855](https://github.com/unipackage/net/commit/6109855061a920710fc743efccae4f433f39b087))
+* 🎸 return call with object ([b2de8d0](https://github.com/unipackage/net/commit/b2de8d0ec22a1b99c1b9b5b69f2d1809deed5ecf))
+
+
+### BREAKING CHANGES
+
+* 🧨 move withMethod to utils packag
+* 🧨 return call with object instead of array
+
 ## [1.1.1](https://github.com/unipackage/net/compare/v1.1.0...v1.1.1) (2023-12-15)
 
 
