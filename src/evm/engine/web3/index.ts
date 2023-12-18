@@ -37,12 +37,14 @@ import {
     EvmType,
     IEVMEngine,
 } from "../../interface"
-import { IEVM, defaultTransactionOptions } from "../../interface"
+import { defaultTransactionOptions } from "../../interface"
 import {
+    convertArrayToObjectByAbiAndName,
+    getAbiFunctionFragmentByMethodName,
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
     parseEvmReplyData,
-} from "./tools"
+} from "../utils"
 
 /**
  * Define ethereum as an optional property.
@@ -224,12 +226,25 @@ export class Web3EvmEngine implements IEVMEngine {
 
         try {
             const params: any[] = input.params || []
-            const result = await this.contractObject.methods[input.method](
+            const originResult = await this.contractObject.methods[
+                input.method
+            ](
                 //@ts-ignore
                 ...params
             ).call()
+            const result = parseEvmReplyData(originResult!)
 
-            return { ok: true, data: parseEvmReplyData(result!) }
+            return {
+                ok: true,
+                data:
+                    result instanceof Array
+                        ? convertArrayToObjectByAbiAndName(
+                              this.contractABI,
+                              input.method,
+                              result
+                          )
+                        : result,
+            }
         } catch (error) {
             return {
                 ok: false,
@@ -388,12 +403,9 @@ export class Web3EvmEngine implements IEVMEngine {
                 error: "Web3 is not initialized!",
             }
         }
-        const abi = this.contractABI.find((method, index) => {
-            return method.type === "function" && method.name === name
-        })
-
+        const abi = getAbiFunctionFragmentByMethodName(this.contractABI, name)
         if (abi) {
-            return this.encodeFunctionSignatureByAbi(abi)
+            return this.encodeFunctionSignatureByAbi(abi as AbiFunctionFragment)
         } else {
             return {
                 ok: false,

@@ -19,6 +19,8 @@
  ********************************************************************************/
 
 import { Result } from "@unipackage/utils"
+import { JsonFragment } from "ethers"
+import { AbiFunctionFragment } from "web3"
 
 /**
  * Represents a parsed data object.
@@ -26,6 +28,84 @@ import { Result } from "@unipackage/utils"
  */
 export type EvmReplyData = {
     [key: string]: any
+}
+
+/**
+ * Converts the output array of a function call to an object using ABI and function name.
+ *
+ * @param abi An array containing function fragments (AbiFunctionFragment or JsonFragment).
+ * @param name The name of the function to search for.
+ * @param data The output array of a function call.
+ * @returns The converted object. Returns undefined if the output array is empty, or the single element if there's only one.
+ * @throws Throws an error if the ABI function fragment is undefined.
+ */
+export function convertArrayToObjectByAbiAndName(
+    abi: AbiFunctionFragment[] | JsonFragment[],
+    name: string,
+    data: any[]
+): any {
+    const abiFragment = getAbiFunctionFragmentByMethodName(abi, name)
+    if (!abiFragment) {
+        throw new Error("Abi function fragment is undefined")
+    }
+    return convertArrayToObjectByAbiFunctionFragment(abiFragment, data)
+}
+
+/**
+ * Converts the output array of a function call to an object.
+ *
+ * @param abi The ABI information of the function, including the output parameters.
+ * @param data The output array of a function call.
+ * @returns The converted object. Returns undefined if the output array is empty, or the single element if there's only one.
+ */
+export function convertArrayToObjectByAbiFunctionFragment(
+    abi: AbiFunctionFragment | JsonFragment,
+    data: any[]
+): any {
+    const outputs = abi.outputs
+    if (!outputs) {
+        throw new Error(`Outputs of abi function fragment undefined!`)
+    }
+    if (outputs.length !== data.length) {
+        throw new Error(
+            `The length of ${JSON.stringify(data)} and ${JSON.stringify(
+                outputs
+            )} is not matched`
+        )
+    }
+    const length = data.length
+
+    if (length === 0) {
+        return undefined
+    } else if (length === 1) {
+        return data[0]
+    } else {
+        const result: any = {}
+        data.forEach((value, index) => {
+            if (outputs[index].name) {
+                result[outputs[index].name!] = value
+            } else {
+                result[`unnameKey+${index}`] = value
+            }
+        })
+        return result
+    }
+}
+
+/**
+ * Retrieves a function fragment from the ABI based on the method name.
+ *
+ * @param abi An array containing function fragments (AbiFunctionFragment or JsonFragment).
+ * @param name The name of the function to search for.
+ * @returns The matching AbiFunctionFragment or JsonFragment object, or undefined if not found.
+ */
+export function getAbiFunctionFragmentByMethodName(
+    abi: AbiFunctionFragment[] | JsonFragment[],
+    name: string
+): AbiFunctionFragment | JsonFragment | undefined {
+    return abi.find((method) => {
+        return method.type === "function" && method.name === name
+    })
 }
 
 /**

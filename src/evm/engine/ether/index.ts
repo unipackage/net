@@ -39,6 +39,7 @@ import {
     IEVMEngine,
     defaultTransactionOptions,
 } from "../../interface"
+import { convertArrayToObjectByAbiAndName } from "../utils"
 
 /**
  * Define ethereum as an optional property.
@@ -193,7 +194,13 @@ export class EthersEvmEngine implements IEVMEngine {
             return {
                 ok: true,
                 data:
-                    result instanceof EthersResult ? result.toArray() : result,
+                    result instanceof EthersResult
+                        ? convertArrayToObjectByAbiAndName(
+                              this.getContractABI(),
+                              input.method,
+                              result.toArray()
+                          )
+                        : result,
             }
         } catch (error) {
             return {
@@ -439,7 +446,7 @@ export class EthersEvmEngine implements IEVMEngine {
 
         try {
             const tr = await this.provider.broadcastTransaction(signed)
-            const result = await this.provider.waitForTransaction(tr.hash);
+            const result = await this.provider.waitForTransaction(tr.hash)
             return {
                 ok: true,
                 data: result,
