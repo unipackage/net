@@ -33,13 +33,32 @@ const expectEventArgs = {
     },
 }
 
-describe("Send(value),getEvmEventArgs,getTransaction,getTransactionReceipt test(By privateKey) ", () => {
+describe("Send(value),wallet,getEvmEventArgs,getTransaction,getTransactionReceipt test(By privateKey) ", () => {
     it("web3 correct test", async function (this: Context) {
         this.timeout(100000)
+        // wallet usage
+        web3Proof.getWallet().add(process.env.METADATASUBMITTERKEY as string)
+        const metasubmiiterAfterAdd = web3Proof
+            .getWallet()
+            .get(process.env.METADATA_SUBMITTER as string)
+        assert.deepStrictEqual(
+            metasubmiiterAfterAdd.data?.address,
+            process.env.METADATA_SUBMITTER as string
+        )
+
         web3Proof.getWallet().add(process.env.PROOFSUBMITTERKEY as string)
+
+        web3Proof.getWallet().remove(process.env.METADATA_SUBMITTER as string)
+        const metasubmiiterAfterRemove = web3Proof
+            .getWallet()
+            .get(process.env.METADATA_SUBMITTER as string)
+        assert.deepStrictEqual(
+            metasubmiiterAfterRemove.data?.address,
+            undefined
+        )
+        web3Proof.getWallet().setDefault(process.env.PROOF_SUBMITTER as string)
+
         const web3Result = await web3Proof.appendDatasetCollateral(1, {
-            // from: process.env.PROOF_SUBMITTER,
-            // privateKey: process.env.PROOFSUBMITTERKEY,
             value: web3Proof.generateWei("1", "gwei"),
         })
         const web3Tx = await web3Proof.getTransaction(
@@ -60,7 +79,11 @@ describe("Send(value),getEvmEventArgs,getTransaction,getTransactionReceipt test(
     it("ethers correct test", async function (this: Context) {
         this.timeout(100000)
 
+        // wallet usage
         ethersProof.getWallet().add(process.env.PROOFSUBMITTERKEY as string)
+        ethersProof
+            .getWallet()
+            .setDefault(process.env.PROOF_SUBMITTER as string)
         const ethersResult = await ethersProof.appendDatasetCollateral(1, {
             // from: process.env.PROOF_SUBMITTER,
             // privateKey: process.env.PROOFSUBMITTERKEY,
