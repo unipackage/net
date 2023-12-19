@@ -24,6 +24,7 @@ import { Web3EvmEngine } from "../../../src/evm/engine/web3"
 import { EthersEvmEngine } from "../../../src/evm/engine/ether"
 import { EvmOutput } from "../../../src/evm/interface"
 import { withSendMethod } from "../../../src/evm/withMethod"
+import { web3Wallet, etherWallet } from "./account"
 import * as dotenv from "dotenv"
 dotenv.config()
 
@@ -48,7 +49,8 @@ export const web3Proof = new ProofEvm(
     new Web3EvmEngine(
         DatasetProofAbi.abi,
         process.env.PROOF_CONTRACT_ADDRESS as string,
-        process.env.PROVIDER_URL as string
+        process.env.PROVIDER_URL as string,
+        etherWallet
     )
 )
 
@@ -59,6 +61,7 @@ export const ethersProof = new ProofEvm(
     new EthersEvmEngine(
         DatasetProofAbi.abi,
         process.env.PROOF_CONTRACT_ADDRESS as string,
-        process.env.PROVIDER_URL as string
+        process.env.PROVIDER_URL as string,
+        web3Wallet
     )
 )

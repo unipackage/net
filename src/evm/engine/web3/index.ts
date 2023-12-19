@@ -46,7 +46,10 @@ import {
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
     parseEvmReplyData,
+    getFromAddress,
+    getFromPrivateKey,
 } from "../utils"
+import { IWallet } from "../../interface/wallet"
 
 /**
  * Define ethereum as an optional property.
@@ -66,6 +69,7 @@ export class Web3EvmEngine implements IEVMEngine {
     private contractAddress: string
     private contractABI: AbiFunctionFragment[]
     private providerUrl: string | undefined = undefined
+    public wallet: IWallet | undefined
 
     /**
      * Constructor for Web3Evm class.
@@ -78,11 +82,13 @@ export class Web3EvmEngine implements IEVMEngine {
     constructor(
         contractABI: AbiFunctionFragment[],
         contractAddress: string,
-        providerUrl?: string
+        providerUrl?: string,
+        wallet?: IWallet
     ) {
         this.contractAddress = contractAddress
         this.contractABI = contractABI
         this.providerUrl = providerUrl
+        this.wallet = wallet
 
         if (!providerUrl) {
             try {
@@ -135,7 +141,8 @@ export class Web3EvmEngine implements IEVMEngine {
             }
         }
 
-        if (!options.from) {
+        const from = getFromAddress(this.wallet as IWallet, options)
+        if (!from) {
             return {
                 ok: false,
                 error: "generateTransaction missing param: [from]",
@@ -143,9 +150,7 @@ export class Web3EvmEngine implements IEVMEngine {
         }
 
         try {
-            const nonce = await this.web3Object.eth.getTransactionCount(
-                options.from
-            )
+            const nonce = await this.web3Object.eth.getTransactionCount(from)
 
             const dataResult = this.encodeEvmInputToTxinput(input)
             if (!dataResult.ok) {
@@ -157,7 +162,7 @@ export class Web3EvmEngine implements IEVMEngine {
 
             const txOriginObject: Web3Transaction = {
                 ...defaultTransactionOptions,
-                from: options.from,
+                from,
                 to: this.contractAddress,
                 nonce: nonce,
                 ...options,
@@ -421,6 +426,9 @@ export class Web3EvmEngine implements IEVMEngine {
         }
     }
 
+    getWallet(): IWallet {
+        return this.wallet as IWallet
+    }
     /**
      * Contract getter.
      *
@@ -592,7 +600,12 @@ export class Web3EvmEngine implements IEVMEngine {
             }
 
             let result: TransactionReceipt
-            if (!options.privateKey) {
+            const privateKey = getFromPrivateKey(
+                this.wallet as IWallet,
+                options
+            )
+            //TODO
+            if (!privateKey) {
                 try {
                     result = await this.web3Object.eth.sendTransaction(
                         generateTransactionResult.data
@@ -693,6 +706,13 @@ export class Web3EvmEngine implements IEVMEngine {
             }
         }
 
+        const privateKey = getFromPrivateKey(this.wallet as IWallet, options)
+        if (!privateKey) {
+            return {
+                ok: false,
+                error: "sign missing param: [from]",
+            }
+        }
         try {
             const generateTransactionResult = await this.generateTransaction(
                 input,
@@ -710,7 +730,7 @@ export class Web3EvmEngine implements IEVMEngine {
 
             const result = await this.web3Object.eth.accounts.signTransaction(
                 generateTransactionResult.data,
-                options.privateKey!
+                privateKey!
             )
             return { ok: true, data: result }
         } catch (error) {

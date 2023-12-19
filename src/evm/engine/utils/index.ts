@@ -21,6 +21,8 @@
 import { Result } from "@unipackage/utils"
 import { JsonFragment } from "ethers"
 import { AbiFunctionFragment } from "web3"
+import { EvmTransactionOptions } from "../../interface"
+import { IWallet } from "../../interface/wallet"
 
 /**
  * Represents a parsed data object.
@@ -191,5 +193,41 @@ export function parseEvmReplyData(data: any): Array<any> | any {
         return data
     }
 
+    return result
+}
+
+export function getFromAddress(
+    wallet: IWallet,
+    options: EvmTransactionOptions
+): string {
+    let result: string
+    const fromResult = wallet && wallet.getDefault()
+    if (!options.from) {
+        if (!fromResult || !fromResult.ok || !fromResult.data) {
+            return ""
+        } else {
+            result = fromResult.data.address
+        }
+    } else {
+        result = options.from
+    }
+    return result
+}
+
+export function getFromPrivateKey(
+    wallet: IWallet,
+    options: EvmTransactionOptions
+): string {
+    let result: string
+    const fromResult = wallet && wallet.getDefault()
+    if (!options.privateKey || !options.from) {
+        if (!fromResult || !fromResult.ok || !fromResult.data) {
+            return ""
+        } else {
+            result = fromResult.data.privateKey
+        }
+    } else {
+        result = options.privateKey
+    }
     return result
 }

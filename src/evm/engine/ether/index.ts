@@ -41,7 +41,12 @@ import {
     IEVMEngine,
     defaultTransactionOptions,
 } from "../../interface"
-import { convertArrayToObjectByAbiAndName } from "../utils"
+import {
+    convertArrayToObjectByAbiAndName,
+    getFromAddress,
+    getFromPrivateKey,
+} from "../utils"
+import { IWallet } from "../../interface/wallet"
 
 /**
  * Define ethereum as an optional property.
@@ -62,6 +67,7 @@ export class EthersEvmEngine implements IEVMEngine {
     private contractAddress: string
     private contractABI: InterfaceAbi
     private providerUrl: string | undefined = undefined
+    public wallet: IWallet | undefined
 
     /**
      * Constructor for EthersEvm class.
@@ -74,11 +80,13 @@ export class EthersEvmEngine implements IEVMEngine {
     constructor(
         contractABI: InterfaceAbi,
         contractAddress: string,
-        providerUrl?: string
+        providerUrl?: string,
+        wallet?: IWallet
     ) {
         this.contractAddress = contractAddress
         this.contractABI = contractABI
         this.providerUrl = providerUrl
+        this.wallet = wallet
 
         if (!providerUrl) {
             if (typeof window !== "undefined" && window.ethereum) {
@@ -125,7 +133,8 @@ export class EthersEvmEngine implements IEVMEngine {
             }
         }
 
-        if (!options.from) {
+        const from = getFromAddress(this.wallet as IWallet, options)
+        if (!from) {
             return {
                 ok: false,
                 error: "generateTransaction missing param: [from]",
@@ -133,7 +142,7 @@ export class EthersEvmEngine implements IEVMEngine {
         }
 
         try {
-            const nonce = await this.provider.getTransactionCount(options.from)
+            const nonce = await this.provider.getTransactionCount(from)
 
             const dataResult = this.encodeEvmInputToTxinput(input)
             if (!dataResult.ok) {
@@ -145,7 +154,7 @@ export class EthersEvmEngine implements IEVMEngine {
 
             const txOriginObject = {
                 ...defaultTransactionOptions,
-                from: options.from,
+                from,
                 to: this.contractAddress,
                 nonce: nonce,
                 ...options,
@@ -312,6 +321,10 @@ export class EthersEvmEngine implements IEVMEngine {
         }
     }
 
+    getWallet(): IWallet {
+        return this.wallet as IWallet
+    }
+
     /**
      * Get the EVM contract.
      *
@@ -451,7 +464,12 @@ export class EthersEvmEngine implements IEVMEngine {
             }
         }
         try {
-            if (!options.privateKey) {
+            const privateKey = getFromPrivateKey(
+                this.wallet as IWallet,
+                options
+            )
+            //TODO
+            if (!privateKey) {
                 const txRes = await this.generateTransaction(input, options)
                 if (!txRes.ok || !txRes.data) {
                     return {
@@ -536,12 +554,16 @@ export class EthersEvmEngine implements IEVMEngine {
 
         try {
             // Ensure the private key is provided in options
-            if (!options.privateKey) {
+            const privateKey = getFromPrivateKey(
+                this.wallet as IWallet,
+                options
+            )
+            if (!privateKey) {
                 throw new Error("Private key is missing in options")
             }
 
             // Create a wallet from the private key
-            const wallet = new Wallet(options.privateKey, this.provider)
+            const wallet = new Wallet(privateKey, this.provider)
 
             const txRes = await this.generateTransaction(input, options)
             if (!txRes.ok || !txRes.data) {

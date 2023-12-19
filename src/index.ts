@@ -56,6 +56,9 @@ export {
 } from "./evm/interface"
 export { Web3EvmEngine } from "./evm/engine/web3"
 export { EthersEvmEngine } from "./evm/engine/ether"
+export { IWallet } from "./evm/interface/wallet"
+export { Web3Wallet } from "./evm/wallet/web3"
+export { EthersWallet } from "./evm/wallet/ethers"
 export {
     convertArrayToObjectByAbiAndName,
     convertArrayToObjectByAbiFragment,

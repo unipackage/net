@@ -17,6 +17,7 @@ import {
     Abi,
     EvmEventArgs,
 } from "../interface"
+import { IWallet } from "../interface/wallet"
 /**
  * Represents the Ethereum Virtual Machine (EVM) Engine interface.
  */
@@ -86,6 +87,10 @@ export abstract class AbstractEvm implements IEVM {
      */
     generateWei(number: Numbers, unit: EtherUnits): string | bigint {
         return this.engine.generateWei(number, unit)
+    }
+
+    getWallet(): IWallet {
+        return this.engine.getWallet()
     }
 
     /**

@@ -37,6 +37,7 @@ import {
     TransactionResponse as EthersTransactionResponse,
     TransactionReceipt as EthersTransactionReceipt,
 } from "ethers"
+import { IWallet } from "./wallet"
 
 /**
  * Represents a transaction response, which can be from ethers or web3.
@@ -173,6 +174,8 @@ export interface IEVMEngine {
      * @returns The generated value in Wei as a string or bigint.
      */
     generateWei(number: Numbers, unit: EtherUnits): string | bigint
+
+    getWallet(): IWallet
 
     /**
      * Get the EVM contract.
