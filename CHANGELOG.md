@@ -1,5 +1,12 @@
 
 
+# [2.2.0](https://github.com/unipackage/net/compare/v2.1.0...v2.2.0) (2023-12-19)
+
+
+### Features
+
+* 🎸 add wallet function ([c1feb65](https://github.com/unipackage/net/commit/c1feb657476e32028e1a9fc335cd7f7b1bae088c))
+
 # [2.1.0](https://github.com/unipackage/net/compare/v2.0.0...v2.1.0) (2023-12-18)
 
 
