@@ -1,5 +1,12 @@
 
 
+## [2.2.1](https://github.com/unipackage/net/compare/v2.2.0...v2.2.1) (2023-12-20)
+
+
+### Bug Fixes
+
+* 🐛 fixed web3wallet get function,and add comment ([3de163c](https://github.com/unipackage/net/commit/3de163c477f79fb7ba9b5411161892611a86db4f))
+
 # [2.2.0](https://github.com/unipackage/net/compare/v2.1.0...v2.2.0) (2023-12-19)
 
 
