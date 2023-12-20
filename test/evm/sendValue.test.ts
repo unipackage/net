@@ -80,7 +80,25 @@ describe("Send(value),wallet,getEvmEventArgs,getTransaction,getTransactionReceip
         this.timeout(100000)
 
         // wallet usage
+        ethersProof.getWallet().add(process.env.METADATASUBMITTERKEY as string)
+        const metasubmiiterAfterAdd = ethersProof
+            .getWallet()
+            .get(process.env.METADATA_SUBMITTER as string)
+        assert.deepStrictEqual(
+            metasubmiiterAfterAdd.data?.address,
+            process.env.METADATA_SUBMITTER as string
+        )
+
         ethersProof.getWallet().add(process.env.PROOFSUBMITTERKEY as string)
+
+        ethersProof.getWallet().remove(process.env.METADATA_SUBMITTER as string)
+        const metasubmiiterAfterRemove = ethersProof
+            .getWallet()
+            .get(process.env.METADATA_SUBMITTER as string)
+        assert.deepStrictEqual(
+            metasubmiiterAfterRemove.data?.address,
+            undefined
+        )
         ethersProof
             .getWallet()
             .setDefault(process.env.PROOF_SUBMITTER as string)

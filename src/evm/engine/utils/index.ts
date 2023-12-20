@@ -196,6 +196,16 @@ export function parseEvmReplyData(data: any): Array<any> | any {
     return result
 }
 
+/**
+ * Retrieves the address from which the transaction should originate.
+ *
+ * If the `options.from` field is provided, it returns that address.
+ * Otherwise, it attempts to retrieve the default address from the provided wallet.
+ *
+ * @param wallet - The wallet from which to retrieve the default address.
+ * @param options - Transaction options that may contain the `from` address.
+ * @returns The address from which the transaction should originate.
+ */
 export function getFromAddress(
     wallet: IWallet,
     options: EvmTransactionOptions
@@ -214,6 +224,16 @@ export function getFromAddress(
     return result
 }
 
+/**
+ * Retrieves the private key corresponding to the address from which the transaction should originate.
+ *
+ * If the `options.privateKey` field is provided, it returns that private key.
+ * Otherwise, it attempts to retrieve the private key corresponding to the default address from the provided wallet.
+ *
+ * @param wallet - The wallet from which to retrieve the default address and its corresponding private key.
+ * @param options - Transaction options that may contain the `privateKey` or `from` address.
+ * @returns The private key corresponding to the address from which the transaction should originate.
+ */
 export function getFromPrivateKey(
     wallet: IWallet,
     options: EvmTransactionOptions

@@ -426,6 +426,14 @@ export class Web3EvmEngine implements IEVMEngine {
         }
     }
 
+    /**
+     * Retrieve the wallet instance.
+     *
+     * This method returns the instance of the wallet that implements the IWallet interface.
+     * Clients can use this method to access and manage the wallet's functionalities.
+     *
+     * @returns An instance of the wallet implementing the IWallet interface.
+     */
     getWallet(): IWallet {
         return this.wallet as IWallet
     }

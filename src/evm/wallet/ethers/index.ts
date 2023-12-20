@@ -22,15 +22,29 @@ import { IWallet, EthersKeyStore } from "../../interface/wallet"
 import { ethers, Wallet } from "ethers"
 import { EvmOutput } from "../../interface"
 
+/**
+ * Implementation of the IWallet interface using ethers.js library.
+ */
 export class EthersWallet implements IWallet {
     private provider: ethers.JsonRpcProvider
     private wallets: Wallet[] = []
     private default?: Wallet
 
+    /**
+     * Constructor to initialize the EthersWallet with a given provider URL.
+     *
+     * @param providerUrl - The URL of the provider to connect to.
+     */
     constructor(providerUrl: string) {
         this.provider = new ethers.JsonRpcProvider(providerUrl)
     }
 
+    /**
+     * Add an account to the wallet.
+     *
+     * @param account - The account private key or address to add.
+     * @returns An output representing the operation's result.
+     */
     add(account: string): EvmOutput<void> {
         try {
             const add = new Wallet(account, this.provider)
@@ -46,24 +60,33 @@ export class EthersWallet implements IWallet {
         }
     }
 
+    /**
+     * Clear all accounts from the wallet.
+     *
+     * @returns An output representing the operation's result.
+     */
     clear(): EvmOutput<void> {
         this.wallets = []
         return { ok: true }
     }
 
+    /**
+     * Retrieve an account from the wallet using its address or index.
+     *
+     * @param addressOrIndex - The address or index of the account to retrieve.
+     * @returns An output representing the operation's result.
+     */
     get(addressOrIndex: string | number): EvmOutput<Wallet> {
-        let result: Wallet
         try {
-            if (typeof addressOrIndex === "number") {
-                result = this.wallets[addressOrIndex]
-            } else {
-                result = this.wallets.find((wallet) => {
-                    return wallet.address === addressOrIndex
-                }) as Wallet
-            }
+            const result = this.wallets.find((wallet, index) => {
+                return (
+                    wallet.address === addressOrIndex ||
+                    addressOrIndex === index
+                )
+            }) as Wallet
             return {
                 ok: true,
-                data: result as Wallet,
+                data: result,
             }
         } catch (error) {
             return {
@@ -73,6 +96,12 @@ export class EthersWallet implements IWallet {
         }
     }
 
+    /**
+     * Remove an account from the wallet using its address or index.
+     *
+     * @param addressOrIndex - The address or index of the account to remove.
+     * @returns An output representing the operation's result.
+     */
     remove(addressOrIndex: string | number): EvmOutput<void> {
         const getRes = this.get(addressOrIndex)
         if (!getRes.ok || !getRes.data) {
@@ -95,6 +124,11 @@ export class EthersWallet implements IWallet {
         }
     }
 
+    /**
+     * Retrieve the default account from the wallet.
+     *
+     * @returns An output representing the operation's result.
+     */
     getDefault(): EvmOutput<Wallet> {
         if (this.wallets.length === 0) {
             return {
@@ -103,7 +137,7 @@ export class EthersWallet implements IWallet {
             }
         }
         if (!this.default) {
-            this.setDefault(this.get(0).data as Wallet)
+            this.setDefault(this.get(0)?.data as Wallet)
         }
 
         return {
@@ -112,6 +146,12 @@ export class EthersWallet implements IWallet {
         }
     }
 
+    /**
+     * Set a new default account for the wallet.
+     *
+     * @param account - The account or its address to set as default.
+     * @returns An output representing the operation's result.
+     */
     setDefault(account: Wallet | string): EvmOutput<void> {
         let address: string
         if (typeof account === "string") {
@@ -134,10 +174,25 @@ export class EthersWallet implements IWallet {
         }
     }
 
+    /**
+     * Export the accounts in the wallet as encrypted keystore files.
+     * Not yet implemented.
+     *
+     * @param password - The password to encrypt the keystore files.
+     * @returns A promise resolving to an output representing the operation's result.
+     */
     export(password?: string): Promise<EvmOutput<EthersKeyStore[]>> {
         throw new Error("not implement")
     }
 
+    /**
+     * Import and add accounts to the wallet from encrypted keystore files.
+     * Not yet implemented.
+     *
+     * @param keyName - The keystore data to import.
+     * @param password - The password to decrypt the keystore files.
+     * @returns A promise resolving to an output representing the operation's result.
+     */
     import(
         keyName: EthersKeyStore[],
         password?: string

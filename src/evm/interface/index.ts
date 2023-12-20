@@ -175,6 +175,14 @@ export interface IEVMEngine {
      */
     generateWei(number: Numbers, unit: EtherUnits): string | bigint
 
+    /**
+     * Retrieve the wallet instance.
+     *
+     * This method returns the instance of the wallet that implements the IWallet interface.
+     * Clients can use this method to access and manage the wallet's functionalities.
+     *
+     * @returns An instance of the wallet implementing the IWallet interface.
+     */
     getWallet(): IWallet
 
     /**

@@ -24,7 +24,7 @@ import { Web3EvmEngine } from "../../../src/evm/engine/web3"
 import { EthersEvmEngine } from "../../../src/evm/engine/ether"
 import { EvmOutput } from "../../../src/evm/interface"
 import { withSendMethod } from "../../../src/evm/withMethod"
-import { web3Wallet, etherWallet } from "./account"
+import { web3Wallet, etherWallet } from "./wallet"
 import * as dotenv from "dotenv"
 dotenv.config()
 

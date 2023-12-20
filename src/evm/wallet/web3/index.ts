@@ -27,16 +27,30 @@ import { Web3 } from "web3"
 import { Wallet } from "web3-eth-accounts"
 import { EvmOutput } from "../../interface"
 
+/**
+ * Implementation of the IWallet interface using the web3.js library.
+ */
 export class Web3Wallet implements IWallet {
     private web3: Web3
     private default?: Web3WalletAccount
     private wallet: Wallet
 
+    /**
+     * Constructor to initialize the Web3Wallet with a given provider URL.
+     *
+     * @param providerUrl - The URL of the provider to connect to.
+     */
     constructor(providerUrl: string) {
         this.web3 = new Web3(providerUrl)
         this.wallet = this.web3.eth.accounts.wallet
     }
 
+    /**
+     * Add an account to the wallet.
+     *
+     * @param account - The account object or private key to add.
+     * @returns An output representing the operation's result.
+     */
     add(account: Web3WalletAccount | string): EvmOutput<void> {
         try {
             this.wallet.add(account)
@@ -49,6 +63,11 @@ export class Web3Wallet implements IWallet {
         }
     }
 
+    /**
+     * Clear all accounts from the wallet.
+     *
+     * @returns An output representing the operation's result.
+     */
     clear(): EvmOutput<void> {
         try {
             this.wallet.clear()
@@ -61,9 +80,20 @@ export class Web3Wallet implements IWallet {
         }
     }
 
+    /**
+     * Retrieve an account from the wallet using its address or index.
+     *
+     * @param addressOrIndex - The address or index of the account to retrieve.
+     * @returns An output representing the operation's result.
+     */
     get(addressOrIndex: string | number): EvmOutput<Web3WalletAccount> {
         try {
-            const account = this.wallet.get(addressOrIndex)
+            const account = this.wallet.find((wallet, index) => {
+                return (
+                    wallet.address === addressOrIndex ||
+                    addressOrIndex === index
+                )
+            })
             return { ok: true, data: account as Web3WalletAccount }
         } catch (error) {
             return {
@@ -73,6 +103,12 @@ export class Web3Wallet implements IWallet {
         }
     }
 
+    /**
+     * Remove an account from the wallet using its address or index.
+     *
+     * @param addressOrIndex - The address or index of the account to remove.
+     * @returns An output representing the operation's result.
+     */
     remove(addressOrIndex: string | number): EvmOutput<void> {
         try {
             this.wallet.remove(addressOrIndex)
@@ -85,6 +121,11 @@ export class Web3Wallet implements IWallet {
         }
     }
 
+    /**
+     * Retrieve the default account from the wallet.
+     *
+     * @returns An output representing the operation's result.
+     */
     getDefault(): EvmOutput<Web3WalletAccount> {
         if (this.wallet.length === 0) {
             return {
@@ -102,6 +143,12 @@ export class Web3Wallet implements IWallet {
         }
     }
 
+    /**
+     * Set a new default account for the wallet.
+     *
+     * @param account - The account or its address to set as default.
+     * @returns An output representing the operation's result.
+     */
     setDefault(account: Web3WalletAccount | string): EvmOutput<void> {
         let address: string
         if (typeof account === "string") {
@@ -124,10 +171,25 @@ export class Web3Wallet implements IWallet {
         }
     }
 
+    /**
+     * Export the accounts in the wallet as encrypted keystore files.
+     * Not yet implemented.
+     *
+     * @param password - The password to encrypt the keystore files.
+     * @returns A promise resolving to an output representing the operation's result.
+     */
     export(password?: string): Promise<EvmOutput<Web3KeyStore[]>> {
         throw new Error("not implement")
     }
 
+    /**
+     * Import and add accounts to the wallet from encrypted keystore files.
+     * Not yet implemented.
+     *
+     * @param keyName - The keystore data to import.
+     * @param password - The password to decrypt the keystore files.
+     * @returns A promise resolving to an output representing the operation's result.
+     */
     import(
         keyName: Web3KeyStore[],
         password?: string
