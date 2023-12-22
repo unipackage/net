@@ -76,19 +76,12 @@ export function convertArrayToObjectByAbiFragment(
             `convertArrayToObjectByAbiFunctionFragment:Outputs of abi fragment undefined!`
         )
     }
-    if (inputsOrOutputs.length !== data.length) {
-        throw new Error(
-            `The length of ${JSON.stringify(data)} and ${JSON.stringify(
-                inputsOrOutputs
-            )} is not matched`
-        )
-    }
-    const length = data.length
 
-    if (length === 0) {
+    const length = inputsOrOutputs.length
+    if (length === 0 || data.length === 0) {
         return undefined
     } else if (length === 1) {
-        return data[0]
+        return data // For single array parameter
     } else {
         const result: any = {}
         data.forEach((value, index) => {
