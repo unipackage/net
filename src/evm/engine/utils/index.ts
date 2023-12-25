@@ -201,11 +201,11 @@ export function parseEvmReplyData(data: any): Array<any> | any {
  */
 export function getFromAddress(
     wallet: IWallet,
-    options: EvmTransactionOptions
+    options?: EvmTransactionOptions
 ): string {
     let result: string
     const fromResult = wallet && wallet.getDefault()
-    if (!options.from) {
+    if (!options || !options.from) {
         if (!fromResult || !fromResult.ok || !fromResult.data) {
             return ""
         } else {
@@ -229,11 +229,11 @@ export function getFromAddress(
  */
 export function getFromPrivateKey(
     wallet: IWallet,
-    options: EvmTransactionOptions
+    options?: EvmTransactionOptions
 ): string {
     let result: string
     const fromResult = wallet && wallet.getDefault()
-    if (!options.privateKey || !options.from) {
+    if (!options || !options.privateKey || !options.from) {
         if (!fromResult || !fromResult.ok || !fromResult.data) {
             return ""
         } else {

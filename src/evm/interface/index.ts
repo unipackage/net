@@ -255,7 +255,7 @@ export interface IEVMEngine {
      */
     send(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<TransactionReceipt>>
 
     /**
@@ -275,7 +275,7 @@ export interface IEVMEngine {
      */
     sign(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<Signature>>
 }
 
