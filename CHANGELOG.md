@@ -1,5 +1,13 @@
 
 
+## [2.2.2](https://github.com/unipackage/net/compare/v2.2.1...v2.2.2) (2023-12-25)
+
+
+### Bug Fixes
+
+* 🐛 make sure the length is matched ([16d81b4](https://github.com/unipackage/net/commit/16d81b4b4d5eec9ea69120f0488a2295dc98dae3)), closes [#10](https://github.com/unipackage/net/issues/10)
+* 🐛 set evm option is option ([ed91ee9](https://github.com/unipackage/net/commit/ed91ee9eb03302c9466611759ffa6295a12e29af)), closes [#12](https://github.com/unipackage/net/issues/12)
+
 ## [2.2.1](https://github.com/unipackage/net/compare/v2.2.0...v2.2.1) (2023-12-20)
 
 
