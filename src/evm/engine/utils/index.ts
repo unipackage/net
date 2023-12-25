@@ -83,6 +83,13 @@ export function convertArrayToObjectByAbiFragment(
     } else if (length === 1) {
         return data // For single array parameter
     } else {
+        if (inputsOrOutputs.length !== data.length) {
+            throw new Error(
+                `The length of ${JSON.stringify(data)} and ${JSON.stringify(
+                    inputsOrOutputs
+                )} is not matched`
+            )
+        }
         const result: any = {}
         data.forEach((value, index) => {
             if (inputsOrOutputs[index].name) {
