@@ -124,7 +124,7 @@ export class EthersEvmEngine implements IEVMEngine {
      */
     private async generateTransaction(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<TransactionRequest>> {
         if (!this.provider || !this.contract) {
             return {
@@ -463,7 +463,7 @@ export class EthersEvmEngine implements IEVMEngine {
      */
     async send(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<any>> {
         if (!this.provider || !this.contract) {
             return {
@@ -551,7 +551,7 @@ export class EthersEvmEngine implements IEVMEngine {
      */
     async sign(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<string>> {
         if (!this.provider || !this.contract) {
             return {

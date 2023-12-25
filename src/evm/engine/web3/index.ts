@@ -132,7 +132,7 @@ export class Web3EvmEngine implements IEVMEngine {
      */
     private async generateTransaction(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<Web3Transaction>> {
         if (!this.web3Object || !this.contractObject) {
             return {
@@ -583,7 +583,7 @@ export class Web3EvmEngine implements IEVMEngine {
      */
     async send(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<EvmOutput<any>> {
         if (!this.web3Object || !this.contractObject) {
             return {
@@ -705,7 +705,7 @@ export class Web3EvmEngine implements IEVMEngine {
      */
     async sign(
         input: EvmInput,
-        options: EvmTransactionOptions
+        options?: EvmTransactionOptions
     ): Promise<Result<Web3Signature>> {
         if (!this.web3Object || !this.contractObject) {
             return {
