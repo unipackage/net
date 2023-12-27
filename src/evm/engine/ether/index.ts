@@ -246,7 +246,13 @@ export class EthersEvmEngine implements IEVMEngine {
                     method: abi!.name,
                     params:
                         params instanceof EthersResult
-                            ? params.toArray()
+                            ? convertArrayToObjectByAbiAndName(
+                                  this.getContractABI(),
+                                  "function",
+                                  abi!.name,
+                                  params.toArray(),
+                                  true
+                              )
                             : params,
                 },
             }
