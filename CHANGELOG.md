@@ -1,5 +1,17 @@
 
 
+# [2.4.0](https://github.com/unipackage/net/compare/v2.2.2...v2.4.0) (2023-12-27)
+
+
+### Bug Fixes
+
+* 🐛 version no ([51e5e1b](https://github.com/unipackage/net/commit/51e5e1b1b47a97d007bd4d555fc9664678e104da))
+
+
+### Features
+
+* 🎸 decodeTxInputToEvmInput return params with object(abi) ([5cafda7](https://github.com/unipackage/net/commit/5cafda7b4042429a05db68393b49e797454747e8)), closes [#15](https://github.com/unipackage/net/issues/15)
+
 ## [2.2.2](https://github.com/unipackage/net/compare/v2.2.1...v2.2.2) (2023-12-25)
 
 
