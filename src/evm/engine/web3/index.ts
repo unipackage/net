@@ -318,11 +318,21 @@ export class Web3EvmEngine implements IEVMEngine {
                 }
             }
 
+            const paramsResult = parseEvmReplyData(decodedParams)
             return {
                 ok: true,
                 data: {
                     method: matchingFunction.name,
-                    params: parseEvmReplyData(decodedParams),
+                    params:
+                        paramsResult instanceof Array
+                            ? convertArrayToObjectByAbiAndName(
+                                  this.getContractABI(),
+                                  "function",
+                                  matchingFunction.name,
+                                  paramsResult,
+                                  true
+                              )
+                            : paramsResult,
                 },
             }
         } catch (error) {
