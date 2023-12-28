@@ -1,5 +1,12 @@
 
 
+## [2.5.1](https://github.com/unipackage/net/compare/v2.5.0...v2.5.1) (2023-12-28)
+
+
+### Bug Fixes
+
+* 🐛 ethers result ([050a803](https://github.com/unipackage/net/commit/050a8032c5208577816960e1226db486bf6f145f)), closes [#17](https://github.com/unipackage/net/issues/17)
+
 # [2.5.0](https://github.com/unipackage/net/compare/v2.4.0...v2.5.0) (2023-12-28)
 
 
