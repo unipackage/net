@@ -19,7 +19,7 @@
  ********************************************************************************/
 
 import { Result } from "@unipackage/utils"
-import { JsonFragment } from "ethers"
+import { JsonFragment, Result as EhtersResult } from "ethers"
 import { AbiFunctionFragment } from "web3"
 import { EvmTransactionOptions } from "../../interface"
 import { IWallet } from "../../interface/wallet"
@@ -254,4 +254,18 @@ export function getFromPrivateKey(
         result = options.privateKey
     }
     return result
+}
+
+/**
+ * Recursively converts an object of type Result from the ethers package to a plain array.
+ * @param {any} result - The object to be converted.
+ * @returns {any} - The converted object.
+ */
+export function unwrapEthersResult(result: any): any {
+    if (result instanceof EhtersResult) {
+        result = result.toArray()
+        return result.map(unwrapEthersResult)
+    } else {
+        return result
+    }
 }

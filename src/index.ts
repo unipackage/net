@@ -65,6 +65,7 @@ export {
     getAbiFragmentByMethodName,
     getEncodedParamsFromTxinput,
     getFunctionSignatureFromTxinput,
+    unwrapEthersResult,
 } from "./evm/engine/utils"
 export { withCallMethod, withSendMethod } from "./evm/withMethod"
 export { Evm } from "./evm/"

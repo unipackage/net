@@ -45,6 +45,7 @@ import {
     convertArrayToObjectByAbiAndName,
     getFromAddress,
     getFromPrivateKey,
+    unwrapEthersResult,
 } from "../utils"
 import { IWallet } from "../../interface/wallet"
 
@@ -210,9 +211,9 @@ export class EthersEvmEngine implements IEVMEngine {
                               this.getContractABI(),
                               "function",
                               input.method,
-                              result.toArray()
+                              unwrapEthersResult(result)
                           )
-                        : result,
+                        : unwrapEthersResult(result),
             }
         } catch (error) {
             return {
@@ -250,14 +251,14 @@ export class EthersEvmEngine implements IEVMEngine {
                                   this.getContractABI(),
                                   "function",
                                   abi!.name,
-                                  params.toArray(),
+                                  unwrapEthersResult(params),
                                   true
                               )
                             : convertArrayToObjectByAbiAndName(
                                   this.getContractABI(),
                                   "function",
                                   abi!.name,
-                                  [params],
+                                  [unwrapEthersResult(params)],
                                   true
                               ),
                 },
@@ -414,10 +415,10 @@ export class EthersEvmEngine implements IEVMEngine {
                                       this.getContractABI(),
                                       "event",
                                       event.name,
-                                      event.args.toArray(),
+                                      unwrapEthersResult(event.args),
                                       true
                                   )
-                                : event.args,
+                                : unwrapEthersResult(event.args),
                     }
                 }
             })
