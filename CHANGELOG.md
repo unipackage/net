@@ -1,5 +1,12 @@
 
 
+# [2.5.0](https://github.com/unipackage/net/compare/v2.4.0...v2.5.0) (2023-12-28)
+
+
+### Features
+
+* 🎸 txinput decode result always use object ([5b3d70e](https://github.com/unipackage/net/commit/5b3d70e7a289c2b3807bf6b63b497e546e6f1c8f))
+
 # [2.4.0](https://github.com/unipackage/net/compare/v2.2.2...v2.4.0) (2023-12-27)
 
 
