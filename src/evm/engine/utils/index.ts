@@ -80,7 +80,11 @@ export function convertArrayToObjectByAbiFragment(
     const length = inputsOrOutputs.length
     if (length === 0 || data.length === 0) {
         return undefined
-    } else if (length === 1) {
+    } else if (
+        length === 1 &&
+        (inputsOrOutputs[0].type?.includes("[]") ||
+            inputsOrOutputs[0].type?.includes("array"))
+    ) {
         return data // For single array parameter
     } else {
         if (inputsOrOutputs.length !== data.length) {

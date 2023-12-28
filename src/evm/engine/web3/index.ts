@@ -332,7 +332,13 @@ export class Web3EvmEngine implements IEVMEngine {
                                   paramsResult,
                                   true
                               )
-                            : paramsResult,
+                            : convertArrayToObjectByAbiAndName(
+                                  this.getContractABI(),
+                                  "function",
+                                  matchingFunction.name,
+                                  [paramsResult],
+                                  true
+                              ),
                 },
             }
         } catch (error) {

@@ -253,7 +253,13 @@ export class EthersEvmEngine implements IEVMEngine {
                                   params.toArray(),
                                   true
                               )
-                            : params,
+                            : convertArrayToObjectByAbiAndName(
+                                  this.getContractABI(),
+                                  "function",
+                                  abi!.name,
+                                  [params],
+                                  true
+                              ),
                 },
             }
         } catch (error) {
