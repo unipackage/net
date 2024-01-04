@@ -177,7 +177,7 @@ export class EthersEvmEngine implements IEVMEngine {
         } catch (error) {
             return {
                 ok: false,
-                error: `generateTransaction error: ${error}`,
+                error: `generateTransaction error: ${JSON.stringify(error)}`,
             }
         }
     }
