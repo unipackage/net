@@ -1,6 +1,6 @@
 {
   "name": "@unipackage/net",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "net",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

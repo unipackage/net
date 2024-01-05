@@ -1,5 +1,12 @@
 
 
+## [2.5.2](https://github.com/unipackage/net/compare/v2.5.1...v2.5.2) (2024-01-05)
+
+
+### Bug Fixes
+
+* 🐛 return complete error information ([4865e7d](https://github.com/unipackage/net/commit/4865e7ddcc787b3c087958a56f465599ab7dda2e)), closes [#18](https://github.com/unipackage/net/issues/18)
+
 ## [2.5.1](https://github.com/unipackage/net/compare/v2.5.0...v2.5.1) (2023-12-28)
 
 
