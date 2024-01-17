@@ -1,5 +1,12 @@
 
 
+## [2.5.3](https://github.com/unipackage/net/compare/v2.5.2...v2.5.3) (2024-01-17)
+
+
+### Bug Fixes
+
+* 🐛 complete error info for call and send ([fa13fff](https://github.com/unipackage/net/commit/fa13fff0778f369150f5230261490184eae4ee89)), closes [#21](https://github.com/unipackage/net/issues/21)
+
 ## [2.5.2](https://github.com/unipackage/net/compare/v2.5.1...v2.5.2) (2024-01-05)
 
 
