@@ -256,7 +256,7 @@ export class Web3EvmEngine implements IEVMEngine {
         } catch (error) {
             return {
                 ok: false,
-                error: `Call contract error: ${error}`,
+                error: `Call contract error: ${JSON.stringify(error)}`,
             }
         }
     }
@@ -672,7 +672,7 @@ export class Web3EvmEngine implements IEVMEngine {
         } catch (error) {
             return {
                 ok: false,
-                error: `Send to contract error: ${error}`,
+                error: `Send to contract error: ${JSON.stringify(error)}`,
             }
         }
     }

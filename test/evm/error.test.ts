@@ -26,8 +26,8 @@ import { generateRandomString } from "../tools/utils/randomString"
 import * as dotenv from "dotenv"
 dotenv.config()
 
-describe.only("Send test(By privateKey)", () => {
-    it("web3 correct test", async function (this: Context) {
+describe("Complete error test", () => {
+    it("web3 send complete error test", async function (this: Context) {
         this.timeout(100000)
         const data = [
             generateRandomString(10),
@@ -51,7 +51,12 @@ describe.only("Send test(By privateKey)", () => {
         assert.ok((web3Result.error as String).includes("SysErrInsufficientFunds"))
     })
 
-    it("ethers correct test", async function (this: Context) {
+    it("web3 call complete error test", async () => {
+        const web3Meta = await web3Datasets.getDatasetMetadata(0)
+        assert.ok((web3Meta.error as String).includes("Value must not be zero"))
+    })
+
+    it("ethers send complete error test", async function (this: Context) {
         this.timeout(100000)
         const data = [
             generateRandomString(10),
@@ -74,5 +79,10 @@ describe.only("Send test(By privateKey)", () => {
 
         assert.equal(ethersResult.ok,false)
         assert.ok((ethersResult.error as String).includes("SysErrInsufficientFunds"))
+    })
+
+    it("ethers call complete error test", async () => {
+        const ethersMeta = await ethersDatasets.getDatasetMetadata(0)
+        assert.ok((ethersMeta.error as String).includes("Value must not be zero"))
     })
 })
