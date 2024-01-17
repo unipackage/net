@@ -218,7 +218,7 @@ export class EthersEvmEngine implements IEVMEngine {
         } catch (error) {
             return {
                 ok: false,
-                error: `Call contract error: ${error}`,
+                error: `Call contract error: ${JSON.stringify(error)}`,
             }
         }
     }
@@ -521,7 +521,7 @@ export class EthersEvmEngine implements IEVMEngine {
         } catch (error) {
             return {
                 ok: false,
-                error: `send error:${error}`,
+                error: `send error:${JSON.stringify(error)}`,
             }
         }
     }
