@@ -93,12 +93,12 @@ export enum EvmType {
 /**
  * Represents the input for an EVM operation.
  */
-export interface EvmInput extends InputParams {}
+export interface EvmInput extends InputParams { }
 
 /**
  * Represents the output of an EVM operation.
  */
-export interface EvmOutput<T> extends Result<T> {}
+export interface EvmOutput<T> extends Result<T> { }
 
 /**
  * Represents the options for an EVM transaction.
@@ -309,32 +309,23 @@ export interface IEVM extends IEVMEngine {
 export function isEvmTransactionOptions(obj: any): boolean {
     return (
         typeof obj === "object" &&
-        (typeof obj.from === "undefined" || typeof obj.from === "string") &&
-        (typeof obj.to === "undefined" || typeof obj.to === "string") &&
-        (typeof obj.value === "undefined" ||
+        (typeof obj.from === "string" ||
+            typeof obj.to === "string" ||
             typeof obj.value === "number" ||
             typeof obj.value === "string" ||
-            typeof obj.value === "bigint") &&
-        (typeof obj.gas === "undefined" || typeof obj.gas === "number") &&
-        (typeof obj.maxFeePerGas === "undefined" ||
-            typeof obj.maxFeePerGas === "number") &&
-        (typeof obj.maxPriorityFeePerGas === "undefined" ||
-            typeof obj.maxPriorityFeePerGas === "number") &&
-        (typeof obj.gasPrice === "undefined" ||
-            typeof obj.gasPrice === "number") &&
-        (typeof obj.gasLimit === "undefined" ||
-            typeof obj.gasLimit === "number") &&
-        (typeof obj.nonce === "undefined" || typeof obj.nonce === "number") &&
-        (typeof obj.data === "undefined" || typeof obj.data === "string") &&
-        (typeof obj.type === "undefined" || typeof obj.type === "number") &&
-        (typeof obj.input === "undefined" || typeof obj.input === "string") &&
-        (typeof obj.chainId === "undefined" ||
-            typeof obj.chainId === "number") &&
-        (typeof obj.networkId === "undefined" ||
-            typeof obj.networkId === "number") &&
-        (typeof obj.confirmations === "undefined" ||
-            typeof obj.confirmations === "number") &&
-        (typeof obj.privateKey === "undefined" ||
+            typeof obj.value === "bigint" ||
+            typeof obj.gas === "number" ||
+            typeof obj.maxFeePerGas === "number" ||
+            typeof obj.maxPriorityFeePerGas === "number" ||
+            typeof obj.gasPrice === "number" ||
+            typeof obj.gasLimit === "number" ||
+            typeof obj.nonce === "number" ||
+            typeof obj.data === "string" ||
+            typeof obj.type === "number" ||
+            typeof obj.input === "string" ||
+            typeof obj.chainId === "number" ||
+            typeof obj.networkId === "number" ||
+            typeof obj.confirmations === "number" ||
             typeof obj.privateKey === "string")
     )
 }
