@@ -1,5 +1,12 @@
 
 
+## [2.5.4](https://github.com/unipackage/net/compare/v2.5.3...v2.5.4) (2024-03-19)
+
+
+### Bug Fixes
+
+* 🐛 an array in the parameters of the send contract method ([8160248](https://github.com/unipackage/net/commit/816024803595176efefd8e2b70542fe595d91c8a)), closes [#14](https://github.com/unipackage/net/issues/14)
+
 ## [2.5.3](https://github.com/unipackage/net/compare/v2.5.2...v2.5.3) (2024-01-17)
 
 
